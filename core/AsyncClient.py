@@ -40,13 +40,13 @@ if __name__ == "__main__":
     else:
         raise NotImplementedError
     
-    trainer = ASTrainer(model, cuda=False)
+    trainer = ASTrainer(model, cuda=True)
     trainer.setup_dataset(dataset)
     trainer.setup_optim(args.epochs, args.batch_size, args.lr)
 
     network = DistNetwork(address=(args.ip, args.port),
                       world_size=args.world_size,
-                      rank=args.rank, ethernet="eth1")
+                      rank=args.rank, ethernet="eth0")
     
     manager = ActiveClientManager(trainer=trainer, network=network)
     manager.run()

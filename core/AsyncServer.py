@@ -92,13 +92,13 @@ if __name__ == "__main__":
     else:
         raise NotImplementedError
     
-    handler = ASHandler(model, args.global_round, args.num_clients)
+    handler = ASHandler(model, args.global_round, args.num_clients, cuda=True)
     handler.setup_optim(args.alpha)
     handler.setup_dataset(dataset)
 
     network = DistNetwork(address=(args.ip, args.port),
                           world_size=args.world_size,
-                          rank=0, ethernet="eth1")
+                          rank=0, ethernet="eth0")
     
     manager = ASManager(handler=handler, network=network)
 
