@@ -17,13 +17,29 @@ def getloss(f):
             return round, loss
 
 def draw_acc(name):
-    f = File("async_mnist_5_20.h5", "r")
+    f1 = File("async_mnist_10_200.h5", "r")
+    f2 = File("sync_mnist_10_200.h5", "r")
 
-    round, acc = getacc(f)
+    round1, acc1 = getacc(f1)
+    round2, acc2 = getacc(f2)
 
-    f.close()
+    # round1 = [3 * x for x in round1]
+    # round2 = [11 * x for x in round2]
 
-    plt.plot(round, acc, marker=".")
+    zipped = list(zip(round1, acc1))
+    print(zipped[0])
+    zipped = [zipped[x] for x in range(1, len(zipped) + 1, 2)]
+    round1 = [x[0] for x in zipped]
+    acc1 = [x[1] for x in zipped]
+
+    print(round1)
+    print(round2)
+ 
+    f1.close()
+    f2.close()
+
+    plt.plot(round1, acc1, marker=".", label="async")
+    plt.plot(round2, acc2, marker=".", label="sync")
 
 
     # xticks = [i for i in range(0, 51, 5)]
@@ -32,12 +48,12 @@ def draw_acc(name):
     # plt.xticks(xticks)
     # plt.yticks(yticks)
 
-    plt.xlabel("round")
-    plt.ylabel("acc")
+    plt.xlabel("times", fontsize=15)
+    plt.ylabel("acc", fontsize=15)
 
-    # plt.legend(fontsize=15)
+    plt.legend(fontsize=15)
 
-    plt.title("Averaged accuracy under varying timeout rates in iid setting", fontsize=20)
+    plt.title("Accuracy vs Communication times", fontsize=20)
 
     plt.savefig(name)
 
@@ -76,7 +92,7 @@ def draw_loss(name):
 
     plt.legend(fontsize=15)
 
-    plt.title("Averaged loss under varying timeout rates in iid setting", fontsize=20)
+    plt.title("Averaged loss under varying timeout rates in iid setting", fontsize=15)
 
     plt.savefig(name)
 
