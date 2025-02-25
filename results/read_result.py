@@ -17,7 +17,7 @@ def getloss(f):
             return round, loss
 
 def draw_acc(name):
-    f = File("async_mnist_5_20.h5", "r")
+    f = File("sync_mnist_10_200.h5", "r")
 
     round, acc = getacc(f)
 
@@ -82,4 +82,4 @@ def draw_loss(name):
 
 
 if __name__ == "__main__":
-    draw_acc("mnist.png")
+    draw_acc("sync_mnist_10_200.png")
