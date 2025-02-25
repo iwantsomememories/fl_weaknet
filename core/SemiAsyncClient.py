@@ -45,7 +45,7 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
         model_parameters = payload[0]
         self.model_version = payload[1]
 
-        print("model_parameters: ", model_parameters)
+        # print("model_parameters: ", model_parameters)
         print("Client {} received model version {}".format(id, self.model_version))
 
         train_loader = self.dataset.get_dataloader(id, self.batch_size)
@@ -106,9 +106,9 @@ class SemiAsyncClientManager(ClientManager):
 
                 assert len(id_list) == 1
 
-                for item in payload:
-                    print(item.shape)
-                    print(item)
+                # for item in payload:
+                #     print(item.shape)
+                #     print(item)
                 self._trainer.local_process(payload=payload, id=id_list[0])
 
                 self.synchronize()

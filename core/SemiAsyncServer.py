@@ -153,6 +153,8 @@ class SemiAsyncServerManager(ServerManager):
         self.tw_setting = tw_setting
 
     def main_loop(self):
+        self.global_start_time = time.time()
+
         while self._handler.if_stop is not True:
             activator = threading.Thread(target=self.activate_clients)
             activator.start()
@@ -186,6 +188,7 @@ class SemiAsyncServerManager(ServerManager):
             self._LOGGER.info(f"The {self._handler.round - 1} round training done.")
         
         self._LOGGER.info("Global Training done.")
+        self._LOGGER.info("Total time cost: {}s".format(time.time() - self.global_start_time))
 
     def shutdown(self):
         self.shutdown_clients()
@@ -197,7 +200,7 @@ class SemiAsyncServerManager(ServerManager):
         rank_dict = self.coordinator.map_id_list(clients_this_round)
 
         self._LOGGER.info("Client id list: {}".format(clients_this_round))
-        print(rank_dict)
+        # print(rank_dict)
 
         for rank, values in rank_dict.items():
             downlink_package = self._handler.downlink_package
