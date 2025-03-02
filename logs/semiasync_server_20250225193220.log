@@ -1,0 +1,1135 @@
+python SemiAsyncServer.py  --global_round 100 --world_size 11 --num_clients 10 --eval_gap 5 &
+
+for i in $(seq 1 10)
+do
+    python SemiAsyncClient.py --rank $i --epochs 3 --world_size 11 &
+done
+
+wait
+
+2025-02-25 19:32:22,598 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:22,598 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:27,701 - semiasync_server - INFO - Received 10 updates in the 0 round .
+2025-02-25 19:32:27,708 - semiasync_server - INFO - The 0 round training done.
+2025-02-25 19:32:27,709 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:27,709 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:32,276 - semiasync_server - INFO - Received 10 updates in the 1 round .
+2025-02-25 19:32:32,280 - semiasync_server - INFO - The 1 round training done.
+2025-02-25 19:32:32,281 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:32,281 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:36,765 - semiasync_server - INFO - Received 7 updates in the 2 round .
+2025-02-25 19:32:36,769 - semiasync_server - INFO - The 2 round training done.
+2025-02-25 19:32:36,769 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:36,770 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:36,772 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 3 round,Outdated Updates: 2.0 round.
+2025-02-25 19:32:36,944 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 3 round,Outdated Updates: 2.0 round.
+2025-02-25 19:32:36,988 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 3 round,Outdated Updates: 2.0 round.
+2025-02-25 19:32:41,166 - semiasync_server - INFO - Received 7 updates in the 3 round .
+2025-02-25 19:32:41,201 - semiasync_server - INFO - The 3 round training done.
+2025-02-25 19:32:41,202 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:41,202 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:41,215 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 4 round,Outdated Updates: 3.0 round.
+2025-02-25 19:32:41,216 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 4 round,Outdated Updates: 3.0 round.
+2025-02-25 19:32:41,256 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 4 round,Outdated Updates: 3.0 round.
+2025-02-25 19:32:45,523 - semiasync_server - INFO - Received 1 updates in the 4 round .
+2025-02-25 19:32:45,908 - semiasync_server - INFO - Round [5/100] test performance on server: 	 Loss: 2.28649 	 Acc: 47.690%
+2025-02-25 19:32:45,914 - semiasync_server - INFO - The 4 round training done.
+2025-02-25 19:32:45,914 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:45,914 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:45,919 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,923 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,925 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,926 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,929 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,930 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,932 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,937 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:45,942 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 5 round,Outdated Updates: 4.0 round.
+2025-02-25 19:32:50,271 - semiasync_server - INFO - Received 6 updates in the 5 round .
+2025-02-25 19:32:50,277 - semiasync_server - INFO - The 5 round training done.
+2025-02-25 19:32:50,277 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:50,278 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:50,280 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 6 round,Outdated Updates: 5.0 round.
+2025-02-25 19:32:50,315 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 6 round,Outdated Updates: 5.0 round.
+2025-02-25 19:32:50,357 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 6 round,Outdated Updates: 5.0 round.
+2025-02-25 19:32:50,616 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 6 round,Outdated Updates: 5.0 round.
+2025-02-25 19:32:54,577 - semiasync_server - INFO - Received 2 updates in the 6 round .
+2025-02-25 19:32:54,581 - semiasync_server - INFO - The 6 round training done.
+2025-02-25 19:32:54,582 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:54,582 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:54,583 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:54,608 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:54,620 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:54,655 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:54,667 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:54,685 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:54,758 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:54,760 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 7 round,Outdated Updates: 6.0 round.
+2025-02-25 19:32:58,863 - semiasync_server - INFO - Received 1 updates in the 7 round .
+2025-02-25 19:32:58,864 - semiasync_server - INFO - The 7 round training done.
+2025-02-25 19:32:58,865 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:32:58,865 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:32:58,930 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:58,959 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:59,012 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:59,038 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:59,059 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:59,075 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:59,151 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:59,201 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:32:59,287 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 8 round,Outdated Updates: 7.0 round.
+2025-02-25 19:33:03,170 - semiasync_server - INFO - Received 4 updates in the 8 round .
+2025-02-25 19:33:03,174 - semiasync_server - INFO - The 8 round training done.
+2025-02-25 19:33:03,175 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:03,175 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:03,211 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 9 round,Outdated Updates: 8.0 round.
+2025-02-25 19:33:03,273 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 9 round,Outdated Updates: 8.0 round.
+2025-02-25 19:33:03,297 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 9 round,Outdated Updates: 8.0 round.
+2025-02-25 19:33:03,334 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 9 round,Outdated Updates: 8.0 round.
+2025-02-25 19:33:03,392 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 9 round,Outdated Updates: 8.0 round.
+2025-02-25 19:33:03,557 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 9 round,Outdated Updates: 8.0 round.
+2025-02-25 19:33:07,311 - semiasync_server - INFO - Received 2 updates in the 9 round .
+2025-02-25 19:33:07,508 - semiasync_server - INFO - Round [10/100] test performance on server: 	 Loss: 1.97309 	 Acc: 57.640%
+2025-02-25 19:33:07,512 - semiasync_server - INFO - The 9 round training done.
+2025-02-25 19:33:07,513 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:07,513 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:07,514 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:07,516 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:07,531 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:07,560 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:07,583 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:07,644 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:07,669 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:07,679 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 10 round,Outdated Updates: 9.0 round.
+2025-02-25 19:33:11,589 - semiasync_server - INFO - Received 1 updates in the 10 round .
+2025-02-25 19:33:11,591 - semiasync_server - INFO - The 10 round training done.
+2025-02-25 19:33:11,591 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:11,592 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:11,720 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:11,738 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:11,804 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:11,847 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:11,916 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:11,932 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:12,051 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:12,059 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:12,134 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 11 round,Outdated Updates: 10.0 round.
+2025-02-25 19:33:15,938 - semiasync_server - INFO - Received 4 updates in the 11 round .
+2025-02-25 19:33:15,942 - semiasync_server - INFO - The 11 round training done.
+2025-02-25 19:33:15,943 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:15,943 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:16,046 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 12 round,Outdated Updates: 11.0 round.
+2025-02-25 19:33:16,055 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 12 round,Outdated Updates: 11.0 round.
+2025-02-25 19:33:16,057 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 12 round,Outdated Updates: 11.0 round.
+2025-02-25 19:33:16,071 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 12 round,Outdated Updates: 11.0 round.
+2025-02-25 19:33:16,213 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 12 round,Outdated Updates: 11.0 round.
+2025-02-25 19:33:16,267 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 12 round,Outdated Updates: 11.0 round.
+2025-02-25 19:33:19,635 - semiasync_server - INFO - Received 1 updates in the 12 round .
+2025-02-25 19:33:19,636 - semiasync_server - INFO - The 12 round training done.
+2025-02-25 19:33:19,637 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:19,638 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:19,723 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:19,768 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:20,095 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:20,169 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:20,220 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:20,279 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:20,294 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:20,335 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:20,410 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 13 round,Outdated Updates: 12.0 round.
+2025-02-25 19:33:23,659 - semiasync_server - INFO - Received 4 updates in the 13 round .
+2025-02-25 19:33:23,664 - semiasync_server - INFO - The 13 round training done.
+2025-02-25 19:33:23,665 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:23,665 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:23,936 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 14 round,Outdated Updates: 13.0 round.
+2025-02-25 19:33:23,974 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 14 round,Outdated Updates: 13.0 round.
+2025-02-25 19:33:23,994 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 14 round,Outdated Updates: 13.0 round.
+2025-02-25 19:33:24,014 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 14 round,Outdated Updates: 13.0 round.
+2025-02-25 19:33:24,042 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 14 round,Outdated Updates: 13.0 round.
+2025-02-25 19:33:24,111 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 14 round,Outdated Updates: 13.0 round.
+2025-02-25 19:33:27,357 - semiasync_server - INFO - Received 1 updates in the 14 round .
+2025-02-25 19:33:27,584 - semiasync_server - INFO - Round [15/100] test performance on server: 	 Loss: 1.79923 	 Acc: 61.860%
+2025-02-25 19:33:27,589 - semiasync_server - INFO - The 14 round training done.
+2025-02-25 19:33:27,589 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:27,589 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:27,592 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:27,593 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:27,956 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:28,018 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:28,042 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:28,114 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:28,180 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:28,225 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:28,324 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 15 round,Outdated Updates: 14.0 round.
+2025-02-25 19:33:31,723 - semiasync_server - INFO - Received 4 updates in the 15 round .
+2025-02-25 19:33:31,728 - semiasync_server - INFO - The 15 round training done.
+2025-02-25 19:33:31,729 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:31,729 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:31,747 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 16 round,Outdated Updates: 15.0 round.
+2025-02-25 19:33:31,887 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 16 round,Outdated Updates: 15.0 round.
+2025-02-25 19:33:31,925 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 16 round,Outdated Updates: 15.0 round.
+2025-02-25 19:33:32,018 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 16 round,Outdated Updates: 15.0 round.
+2025-02-25 19:33:32,020 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 16 round,Outdated Updates: 15.0 round.
+2025-02-25 19:33:32,074 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 16 round,Outdated Updates: 15.0 round.
+2025-02-25 19:33:35,821 - semiasync_server - INFO - Received 1 updates in the 16 round .
+2025-02-25 19:33:35,822 - semiasync_server - INFO - The 16 round training done.
+2025-02-25 19:33:35,822 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:35,822 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:35,900 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:35,918 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:35,956 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:36,065 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:36,111 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:36,174 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:36,319 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:36,348 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:36,433 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 17 round,Outdated Updates: 16.0 round.
+2025-02-25 19:33:40,124 - semiasync_server - INFO - Received 3 updates in the 17 round .
+2025-02-25 19:33:40,130 - semiasync_server - INFO - The 17 round training done.
+2025-02-25 19:33:40,131 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:40,131 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:40,132 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 18 round,Outdated Updates: 17.0 round.
+2025-02-25 19:33:40,134 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 18 round,Outdated Updates: 17.0 round.
+2025-02-25 19:33:40,160 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 18 round,Outdated Updates: 17.0 round.
+2025-02-25 19:33:40,194 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 18 round,Outdated Updates: 17.0 round.
+2025-02-25 19:33:40,263 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 18 round,Outdated Updates: 17.0 round.
+2025-02-25 19:33:40,337 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 18 round,Outdated Updates: 17.0 round.
+2025-02-25 19:33:40,413 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 18 round,Outdated Updates: 17.0 round.
+2025-02-25 19:33:44,136 - semiasync_server - INFO - Received 2 updates in the 18 round .
+2025-02-25 19:33:44,137 - semiasync_server - INFO - The 18 round training done.
+2025-02-25 19:33:44,138 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:44,138 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:44,272 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:44,373 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:44,386 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:44,404 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:44,439 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:44,611 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:44,654 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:44,717 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 19 round,Outdated Updates: 18.0 round.
+2025-02-25 19:33:48,429 - semiasync_server - INFO - Received 2 updates in the 19 round .
+2025-02-25 19:33:48,668 - semiasync_server - INFO - Round [20/100] test performance on server: 	 Loss: 1.66407 	 Acc: 64.550%
+2025-02-25 19:33:48,673 - semiasync_server - INFO - The 19 round training done.
+2025-02-25 19:33:48,673 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:48,674 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:48,676 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:48,681 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:48,688 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:48,689 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:48,761 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:48,788 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:48,793 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:48,829 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 20 round,Outdated Updates: 19.0 round.
+2025-02-25 19:33:52,954 - semiasync_server - INFO - Received 1 updates in the 20 round .
+2025-02-25 19:33:52,955 - semiasync_server - INFO - The 20 round training done.
+2025-02-25 19:33:52,955 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:52,956 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:52,962 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,002 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,068 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,085 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,090 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,164 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,175 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,180 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:53,199 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 21 round,Outdated Updates: 20.0 round.
+2025-02-25 19:33:57,451 - semiasync_server - INFO - Received 2 updates in the 21 round .
+2025-02-25 19:33:57,455 - semiasync_server - INFO - The 21 round training done.
+2025-02-25 19:33:57,456 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:33:57,456 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:33:57,508 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:33:57,516 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:33:57,527 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:33:57,534 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:33:57,587 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:33:57,646 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:33:57,699 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:33:57,729 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 22 round,Outdated Updates: 21.0 round.
+2025-02-25 19:34:01,732 - semiasync_server - INFO - Received 3 updates in the 22 round .
+2025-02-25 19:34:01,737 - semiasync_server - INFO - The 22 round training done.
+2025-02-25 19:34:01,737 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:01,737 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:01,827 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 23 round,Outdated Updates: 22.0 round.
+2025-02-25 19:34:01,838 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 23 round,Outdated Updates: 22.0 round.
+2025-02-25 19:34:01,854 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 23 round,Outdated Updates: 22.0 round.
+2025-02-25 19:34:01,996 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 23 round,Outdated Updates: 22.0 round.
+2025-02-25 19:34:02,033 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 23 round,Outdated Updates: 22.0 round.
+2025-02-25 19:34:02,043 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 23 round,Outdated Updates: 22.0 round.
+2025-02-25 19:34:02,170 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 23 round,Outdated Updates: 22.0 round.
+2025-02-25 19:34:05,940 - semiasync_server - INFO - Received 3 updates in the 23 round .
+2025-02-25 19:34:05,945 - semiasync_server - INFO - The 23 round training done.
+2025-02-25 19:34:05,946 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:05,946 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:05,975 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 24 round,Outdated Updates: 23.0 round.
+2025-02-25 19:34:06,049 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 24 round,Outdated Updates: 23.0 round.
+2025-02-25 19:34:06,154 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 24 round,Outdated Updates: 23.0 round.
+2025-02-25 19:34:06,156 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 24 round,Outdated Updates: 23.0 round.
+2025-02-25 19:34:06,258 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 24 round,Outdated Updates: 23.0 round.
+2025-02-25 19:34:06,269 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 24 round,Outdated Updates: 23.0 round.
+2025-02-25 19:34:06,329 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 24 round,Outdated Updates: 23.0 round.
+2025-02-25 19:34:09,760 - semiasync_server - INFO - Received 2 updates in the 24 round .
+2025-02-25 19:34:09,924 - semiasync_server - INFO - Round [25/100] test performance on server: 	 Loss: 1.55367 	 Acc: 67.180%
+2025-02-25 19:34:09,928 - semiasync_server - INFO - The 24 round training done.
+2025-02-25 19:34:09,929 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:09,929 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:09,938 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:10,300 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:10,306 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:10,324 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:10,337 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:10,389 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:10,433 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:10,550 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 25 round,Outdated Updates: 24.0 round.
+2025-02-25 19:34:14,102 - semiasync_server - INFO - Received 4 updates in the 25 round .
+2025-02-25 19:34:14,107 - semiasync_server - INFO - The 25 round training done.
+2025-02-25 19:34:14,107 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:14,107 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:14,109 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 26 round,Outdated Updates: 25.0 round.
+2025-02-25 19:34:14,151 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 26 round,Outdated Updates: 25.0 round.
+2025-02-25 19:34:14,189 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 26 round,Outdated Updates: 25.0 round.
+2025-02-25 19:34:14,228 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 26 round,Outdated Updates: 25.0 round.
+2025-02-25 19:34:14,317 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 26 round,Outdated Updates: 25.0 round.
+2025-02-25 19:34:14,375 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 26 round,Outdated Updates: 25.0 round.
+2025-02-25 19:34:18,538 - semiasync_server - INFO - Received 1 updates in the 26 round .
+2025-02-25 19:34:18,553 - semiasync_server - INFO - The 26 round training done.
+2025-02-25 19:34:18,554 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:18,554 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:18,556 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,557 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,559 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,560 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,602 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,618 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,663 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,664 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:18,804 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 27 round,Outdated Updates: 26.0 round.
+2025-02-25 19:34:22,970 - semiasync_server - INFO - Received 9 updates in the 27 round .
+2025-02-25 19:34:22,976 - semiasync_server - INFO - The 27 round training done.
+2025-02-25 19:34:22,977 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:22,977 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:23,134 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 28 round,Outdated Updates: 27.0 round.
+2025-02-25 19:34:27,343 - semiasync_server - INFO - Received 6 updates in the 28 round .
+2025-02-25 19:34:27,351 - semiasync_server - INFO - The 28 round training done.
+2025-02-25 19:34:27,351 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:27,352 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:27,382 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 29 round,Outdated Updates: 28.0 round.
+2025-02-25 19:34:27,446 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 29 round,Outdated Updates: 28.0 round.
+2025-02-25 19:34:27,461 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 29 round,Outdated Updates: 28.0 round.
+2025-02-25 19:34:27,478 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 29 round,Outdated Updates: 28.0 round.
+2025-02-25 19:34:31,569 - semiasync_server - INFO - Received 1 updates in the 29 round .
+2025-02-25 19:34:31,816 - semiasync_server - INFO - Round [30/100] test performance on server: 	 Loss: 1.45946 	 Acc: 69.590%
+2025-02-25 19:34:31,827 - semiasync_server - INFO - The 29 round training done.
+2025-02-25 19:34:31,827 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:31,828 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:31,830 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:31,832 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:31,835 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:31,836 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:31,866 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:31,887 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:31,948 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:31,981 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:32,054 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 30 round,Outdated Updates: 29.0 round.
+2025-02-25 19:34:36,054 - semiasync_server - INFO - Received 2 updates in the 30 round .
+2025-02-25 19:34:36,058 - semiasync_server - INFO - The 30 round training done.
+2025-02-25 19:34:36,058 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:36,058 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:36,061 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:36,143 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:36,153 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:36,206 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:36,244 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:36,283 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:36,344 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:36,369 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 31 round,Outdated Updates: 30.0 round.
+2025-02-25 19:34:40,230 - semiasync_server - INFO - Received 1 updates in the 31 round .
+2025-02-25 19:34:40,232 - semiasync_server - INFO - The 31 round training done.
+2025-02-25 19:34:40,232 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:40,232 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:40,266 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,305 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,431 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,540 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,561 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,563 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,585 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,604 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:40,639 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 32 round,Outdated Updates: 31.0 round.
+2025-02-25 19:34:44,485 - semiasync_server - INFO - Received 4 updates in the 32 round .
+2025-02-25 19:34:44,490 - semiasync_server - INFO - The 32 round training done.
+2025-02-25 19:34:44,491 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:44,491 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:44,588 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 33 round,Outdated Updates: 32.0 round.
+2025-02-25 19:34:44,627 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 33 round,Outdated Updates: 32.0 round.
+2025-02-25 19:34:44,674 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 33 round,Outdated Updates: 32.0 round.
+2025-02-25 19:34:44,728 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 33 round,Outdated Updates: 32.0 round.
+2025-02-25 19:34:44,762 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 33 round,Outdated Updates: 32.0 round.
+2025-02-25 19:34:44,863 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 33 round,Outdated Updates: 32.0 round.
+2025-02-25 19:34:48,536 - semiasync_server - INFO - Received 4 updates in the 33 round .
+2025-02-25 19:34:48,540 - semiasync_server - INFO - The 33 round training done.
+2025-02-25 19:34:48,541 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:48,541 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:48,567 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 34 round,Outdated Updates: 33.0 round.
+2025-02-25 19:34:48,642 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 34 round,Outdated Updates: 33.0 round.
+2025-02-25 19:34:48,698 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 34 round,Outdated Updates: 33.0 round.
+2025-02-25 19:34:48,724 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 34 round,Outdated Updates: 33.0 round.
+2025-02-25 19:34:48,739 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 34 round,Outdated Updates: 33.0 round.
+2025-02-25 19:34:48,889 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 34 round,Outdated Updates: 33.0 round.
+2025-02-25 19:34:52,782 - semiasync_server - INFO - Received 1 updates in the 34 round .
+2025-02-25 19:34:53,008 - semiasync_server - INFO - Round [35/100] test performance on server: 	 Loss: 1.38130 	 Acc: 71.990%
+2025-02-25 19:34:53,012 - semiasync_server - INFO - The 34 round training done.
+2025-02-25 19:34:53,013 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:53,013 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:53,020 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,031 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,038 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,055 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,063 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,066 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,074 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,075 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:53,153 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 35 round,Outdated Updates: 34.0 round.
+2025-02-25 19:34:57,276 - semiasync_server - INFO - Received 2 updates in the 35 round .
+2025-02-25 19:34:57,279 - semiasync_server - INFO - The 35 round training done.
+2025-02-25 19:34:57,280 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:34:57,280 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:34:57,281 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:34:57,311 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:34:57,367 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:34:57,386 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:34:57,485 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:34:57,486 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:34:57,537 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:34:57,593 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 36 round,Outdated Updates: 35.0 round.
+2025-02-25 19:35:01,673 - semiasync_server - INFO - Received 4 updates in the 36 round .
+2025-02-25 19:35:01,678 - semiasync_server - INFO - The 36 round training done.
+2025-02-25 19:35:01,679 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:01,679 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:01,714 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 37 round,Outdated Updates: 36.0 round.
+2025-02-25 19:35:01,768 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 37 round,Outdated Updates: 36.0 round.
+2025-02-25 19:35:01,779 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 37 round,Outdated Updates: 36.0 round.
+2025-02-25 19:35:01,820 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 37 round,Outdated Updates: 36.0 round.
+2025-02-25 19:35:01,875 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 37 round,Outdated Updates: 36.0 round.
+2025-02-25 19:35:01,928 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 37 round,Outdated Updates: 36.0 round.
+2025-02-25 19:35:05,986 - semiasync_server - INFO - Received 4 updates in the 37 round .
+2025-02-25 19:35:05,999 - semiasync_server - INFO - The 37 round training done.
+2025-02-25 19:35:05,999 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:05,999 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:06,001 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 38 round,Outdated Updates: 37.0 round.
+2025-02-25 19:35:06,122 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 38 round,Outdated Updates: 37.0 round.
+2025-02-25 19:35:06,166 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 38 round,Outdated Updates: 37.0 round.
+2025-02-25 19:35:06,234 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 38 round,Outdated Updates: 37.0 round.
+2025-02-25 19:35:06,245 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 38 round,Outdated Updates: 37.0 round.
+2025-02-25 19:35:06,298 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 38 round,Outdated Updates: 37.0 round.
+2025-02-25 19:35:10,358 - semiasync_server - INFO - Received 3 updates in the 38 round .
+2025-02-25 19:35:10,363 - semiasync_server - INFO - The 38 round training done.
+2025-02-25 19:35:10,364 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:10,364 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:10,409 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 39 round,Outdated Updates: 38.0 round.
+2025-02-25 19:35:10,420 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 39 round,Outdated Updates: 38.0 round.
+2025-02-25 19:35:10,442 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 39 round,Outdated Updates: 38.0 round.
+2025-02-25 19:35:10,467 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 39 round,Outdated Updates: 38.0 round.
+2025-02-25 19:35:10,489 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 39 round,Outdated Updates: 38.0 round.
+2025-02-25 19:35:10,524 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 39 round,Outdated Updates: 38.0 round.
+2025-02-25 19:35:10,557 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 39 round,Outdated Updates: 38.0 round.
+2025-02-25 19:35:14,651 - semiasync_server - INFO - Received 4 updates in the 39 round .
+2025-02-25 19:35:14,816 - semiasync_server - INFO - Round [40/100] test performance on server: 	 Loss: 1.32396 	 Acc: 73.750%
+2025-02-25 19:35:14,821 - semiasync_server - INFO - The 39 round training done.
+2025-02-25 19:35:14,821 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:14,821 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:14,824 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 40 round,Outdated Updates: 39.0 round.
+2025-02-25 19:35:14,834 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 40 round,Outdated Updates: 39.0 round.
+2025-02-25 19:35:14,845 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 40 round,Outdated Updates: 39.0 round.
+2025-02-25 19:35:14,864 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 40 round,Outdated Updates: 39.0 round.
+2025-02-25 19:35:14,874 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 40 round,Outdated Updates: 39.0 round.
+2025-02-25 19:35:14,883 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 40 round,Outdated Updates: 39.0 round.
+2025-02-25 19:35:18,980 - semiasync_server - INFO - Received 2 updates in the 40 round .
+2025-02-25 19:35:18,983 - semiasync_server - INFO - The 40 round training done.
+2025-02-25 19:35:18,983 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:18,984 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:19,009 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:19,049 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:19,073 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:19,173 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:19,190 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:19,214 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:19,227 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:19,253 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 41 round,Outdated Updates: 40.0 round.
+2025-02-25 19:35:23,278 - semiasync_server - INFO - Received 3 updates in the 41 round .
+2025-02-25 19:35:23,282 - semiasync_server - INFO - The 41 round training done.
+2025-02-25 19:35:23,283 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:23,283 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:23,303 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 42 round,Outdated Updates: 41.0 round.
+2025-02-25 19:35:23,441 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 42 round,Outdated Updates: 41.0 round.
+2025-02-25 19:35:23,473 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 42 round,Outdated Updates: 41.0 round.
+2025-02-25 19:35:23,501 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 42 round,Outdated Updates: 41.0 round.
+2025-02-25 19:35:23,515 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 42 round,Outdated Updates: 41.0 round.
+2025-02-25 19:35:23,592 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 42 round,Outdated Updates: 41.0 round.
+2025-02-25 19:35:23,883 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 42 round,Outdated Updates: 41.0 round.
+2025-02-25 19:35:27,401 - semiasync_server - INFO - Received 3 updates in the 42 round .
+2025-02-25 19:35:27,406 - semiasync_server - INFO - The 42 round training done.
+2025-02-25 19:35:27,406 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:27,406 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:27,633 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 43 round,Outdated Updates: 42.0 round.
+2025-02-25 19:35:27,643 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 43 round,Outdated Updates: 42.0 round.
+2025-02-25 19:35:27,660 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 43 round,Outdated Updates: 42.0 round.
+2025-02-25 19:35:27,671 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 43 round,Outdated Updates: 42.0 round.
+2025-02-25 19:35:27,689 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 43 round,Outdated Updates: 42.0 round.
+2025-02-25 19:35:27,725 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 43 round,Outdated Updates: 42.0 round.
+2025-02-25 19:35:27,804 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 43 round,Outdated Updates: 42.0 round.
+2025-02-25 19:35:31,160 - semiasync_server - INFO - Received 2 updates in the 43 round .
+2025-02-25 19:35:31,162 - semiasync_server - INFO - The 43 round training done.
+2025-02-25 19:35:31,162 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:31,163 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:31,236 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:31,669 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:31,713 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:31,739 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:31,761 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:31,785 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:31,828 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:31,884 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 44 round,Outdated Updates: 43.0 round.
+2025-02-25 19:35:35,381 - semiasync_server - INFO - Received 4 updates in the 44 round .
+2025-02-25 19:35:35,623 - semiasync_server - INFO - Round [45/100] test performance on server: 	 Loss: 1.28431 	 Acc: 75.270%
+2025-02-25 19:35:35,628 - semiasync_server - INFO - The 44 round training done.
+2025-02-25 19:35:35,629 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:35,629 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:35,635 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 45 round,Outdated Updates: 44.0 round.
+2025-02-25 19:35:35,636 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 45 round,Outdated Updates: 44.0 round.
+2025-02-25 19:35:35,719 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 45 round,Outdated Updates: 44.0 round.
+2025-02-25 19:35:35,736 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 45 round,Outdated Updates: 44.0 round.
+2025-02-25 19:35:35,775 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 45 round,Outdated Updates: 44.0 round.
+2025-02-25 19:35:35,789 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 45 round,Outdated Updates: 44.0 round.
+2025-02-25 19:35:39,661 - semiasync_server - INFO - Received 1 updates in the 45 round .
+2025-02-25 19:35:39,662 - semiasync_server - INFO - The 45 round training done.
+2025-02-25 19:35:39,662 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:39,662 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:39,823 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:39,843 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:39,875 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:39,900 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:40,014 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:40,120 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:40,152 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:40,192 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:40,204 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 46 round,Outdated Updates: 45.0 round.
+2025-02-25 19:35:43,800 - semiasync_server - INFO - Received 3 updates in the 46 round .
+2025-02-25 19:35:43,805 - semiasync_server - INFO - The 46 round training done.
+2025-02-25 19:35:43,806 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:43,806 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:44,066 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 47 round,Outdated Updates: 46.0 round.
+2025-02-25 19:35:44,068 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 47 round,Outdated Updates: 46.0 round.
+2025-02-25 19:35:44,127 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 47 round,Outdated Updates: 46.0 round.
+2025-02-25 19:35:44,164 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 47 round,Outdated Updates: 46.0 round.
+2025-02-25 19:35:44,166 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 47 round,Outdated Updates: 46.0 round.
+2025-02-25 19:35:44,324 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 47 round,Outdated Updates: 46.0 round.
+2025-02-25 19:35:44,373 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 47 round,Outdated Updates: 46.0 round.
+2025-02-25 19:35:47,880 - semiasync_server - INFO - Received 2 updates in the 47 round .
+2025-02-25 19:35:47,884 - semiasync_server - INFO - The 47 round training done.
+2025-02-25 19:35:47,884 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:47,884 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:48,020 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:48,118 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:48,180 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:48,351 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:48,368 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:48,369 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:48,371 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:48,373 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 48 round,Outdated Updates: 47.0 round.
+2025-02-25 19:35:52,090 - semiasync_server - INFO - Received 2 updates in the 48 round .
+2025-02-25 19:35:52,092 - semiasync_server - INFO - The 48 round training done.
+2025-02-25 19:35:52,092 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:52,092 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:52,148 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:52,164 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:52,249 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:52,358 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:52,369 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:52,429 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:52,442 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:52,579 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 49 round,Outdated Updates: 48.0 round.
+2025-02-25 19:35:55,770 - semiasync_server - INFO - Received 2 updates in the 49 round .
+2025-02-25 19:35:56,007 - semiasync_server - INFO - Round [50/100] test performance on server: 	 Loss: 1.25591 	 Acc: 76.550%
+2025-02-25 19:35:56,013 - semiasync_server - INFO - The 49 round training done.
+2025-02-25 19:35:56,013 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:56,013 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:35:56,016 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:56,329 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:56,402 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:56,527 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:56,567 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:56,571 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:56,577 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:56,602 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 50 round,Outdated Updates: 49.0 round.
+2025-02-25 19:35:59,956 - semiasync_server - INFO - Received 4 updates in the 50 round .
+2025-02-25 19:35:59,961 - semiasync_server - INFO - The 50 round training done.
+2025-02-25 19:35:59,961 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:35:59,961 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:00,158 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 51 round,Outdated Updates: 50.0 round.
+2025-02-25 19:36:00,424 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 51 round,Outdated Updates: 50.0 round.
+2025-02-25 19:36:00,468 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 51 round,Outdated Updates: 50.0 round.
+2025-02-25 19:36:00,484 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 51 round,Outdated Updates: 50.0 round.
+2025-02-25 19:36:00,533 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 51 round,Outdated Updates: 50.0 round.
+2025-02-25 19:36:00,574 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 51 round,Outdated Updates: 50.0 round.
+2025-02-25 19:36:03,707 - semiasync_server - INFO - Received 1 updates in the 51 round .
+2025-02-25 19:36:03,708 - semiasync_server - INFO - The 51 round training done.
+2025-02-25 19:36:03,708 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:03,709 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:03,748 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:03,912 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:03,927 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:04,063 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:04,262 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:04,356 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:04,416 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:04,447 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:04,485 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 52 round,Outdated Updates: 51.0 round.
+2025-02-25 19:36:07,756 - semiasync_server - INFO - Received 3 updates in the 52 round .
+2025-02-25 19:36:07,760 - semiasync_server - INFO - The 52 round training done.
+2025-02-25 19:36:07,761 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:07,761 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:07,763 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 53 round,Outdated Updates: 52.0 round.
+2025-02-25 19:36:07,787 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 53 round,Outdated Updates: 52.0 round.
+2025-02-25 19:36:07,965 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 53 round,Outdated Updates: 52.0 round.
+2025-02-25 19:36:07,998 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 53 round,Outdated Updates: 52.0 round.
+2025-02-25 19:36:08,071 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 53 round,Outdated Updates: 52.0 round.
+2025-02-25 19:36:08,190 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 53 round,Outdated Updates: 52.0 round.
+2025-02-25 19:36:08,199 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 53 round,Outdated Updates: 52.0 round.
+2025-02-25 19:36:11,482 - semiasync_server - INFO - Received 1 updates in the 53 round .
+2025-02-25 19:36:11,483 - semiasync_server - INFO - The 53 round training done.
+2025-02-25 19:36:11,484 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:11,484 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:11,500 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:11,553 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:11,678 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:11,913 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:12,070 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:12,158 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:12,190 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:12,204 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:12,214 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 54 round,Outdated Updates: 53.0 round.
+2025-02-25 19:36:15,219 - semiasync_server - INFO - Received 4 updates in the 54 round .
+2025-02-25 19:36:15,382 - semiasync_server - INFO - Round [55/100] test performance on server: 	 Loss: 1.23780 	 Acc: 77.560%
+2025-02-25 19:36:15,387 - semiasync_server - INFO - The 54 round training done.
+2025-02-25 19:36:15,387 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:15,387 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:15,766 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 55 round,Outdated Updates: 54.0 round.
+2025-02-25 19:36:15,874 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 55 round,Outdated Updates: 54.0 round.
+2025-02-25 19:36:15,941 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 55 round,Outdated Updates: 54.0 round.
+2025-02-25 19:36:15,948 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 55 round,Outdated Updates: 54.0 round.
+2025-02-25 19:36:16,103 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 55 round,Outdated Updates: 54.0 round.
+2025-02-25 19:36:16,149 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 55 round,Outdated Updates: 54.0 round.
+2025-02-25 19:36:18,908 - semiasync_server - INFO - Received 3 updates in the 55 round .
+2025-02-25 19:36:18,913 - semiasync_server - INFO - The 55 round training done.
+2025-02-25 19:36:18,913 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:18,914 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:19,284 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 56 round,Outdated Updates: 55.0 round.
+2025-02-25 19:36:19,461 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 56 round,Outdated Updates: 55.0 round.
+2025-02-25 19:36:19,517 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 56 round,Outdated Updates: 55.0 round.
+2025-02-25 19:36:19,673 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 56 round,Outdated Updates: 55.0 round.
+2025-02-25 19:36:19,740 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 56 round,Outdated Updates: 55.0 round.
+2025-02-25 19:36:19,834 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 56 round,Outdated Updates: 55.0 round.
+2025-02-25 19:36:19,849 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 56 round,Outdated Updates: 55.0 round.
+2025-02-25 19:36:23,003 - semiasync_server - INFO - Received 4 updates in the 56 round .
+2025-02-25 19:36:23,007 - semiasync_server - INFO - The 56 round training done.
+2025-02-25 19:36:23,007 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:23,008 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:23,081 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 57 round,Outdated Updates: 56.0 round.
+2025-02-25 19:36:23,192 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 57 round,Outdated Updates: 56.0 round.
+2025-02-25 19:36:23,227 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 57 round,Outdated Updates: 56.0 round.
+2025-02-25 19:36:23,229 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 57 round,Outdated Updates: 56.0 round.
+2025-02-25 19:36:23,238 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 57 round,Outdated Updates: 56.0 round.
+2025-02-25 19:36:23,362 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 57 round,Outdated Updates: 56.0 round.
+2025-02-25 19:36:26,975 - semiasync_server - INFO - Received 1 updates in the 57 round .
+2025-02-25 19:36:26,977 - semiasync_server - INFO - The 57 round training done.
+2025-02-25 19:36:26,977 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:26,977 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:27,063 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,086 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,102 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,193 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,261 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,477 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,491 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,609 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:27,617 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 58 round,Outdated Updates: 57.0 round.
+2025-02-25 19:36:31,223 - semiasync_server - INFO - Received 5 updates in the 58 round .
+2025-02-25 19:36:31,229 - semiasync_server - INFO - The 58 round training done.
+2025-02-25 19:36:31,230 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:31,230 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:31,310 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 59 round,Outdated Updates: 58.0 round.
+2025-02-25 19:36:31,365 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 59 round,Outdated Updates: 58.0 round.
+2025-02-25 19:36:31,485 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 59 round,Outdated Updates: 58.0 round.
+2025-02-25 19:36:31,534 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 59 round,Outdated Updates: 58.0 round.
+2025-02-25 19:36:31,635 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 59 round,Outdated Updates: 58.0 round.
+2025-02-25 19:36:35,246 - semiasync_server - INFO - Received 1 updates in the 59 round .
+2025-02-25 19:36:35,496 - semiasync_server - INFO - Round [60/100] test performance on server: 	 Loss: 1.22587 	 Acc: 78.510%
+2025-02-25 19:36:35,501 - semiasync_server - INFO - The 59 round training done.
+2025-02-25 19:36:35,502 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:35,502 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:35,504 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,506 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,509 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,510 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,574 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,607 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,632 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,646 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:35,647 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 60 round,Outdated Updates: 59.0 round.
+2025-02-25 19:36:39,847 - semiasync_server - INFO - Received 1 updates in the 60 round .
+2025-02-25 19:36:39,848 - semiasync_server - INFO - The 60 round training done.
+2025-02-25 19:36:39,849 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:39,849 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:39,893 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:39,957 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:39,959 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:40,007 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:40,009 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:40,046 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:40,058 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:40,075 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:40,141 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 61 round,Outdated Updates: 60.0 round.
+2025-02-25 19:36:44,278 - semiasync_server - INFO - Received 3 updates in the 61 round .
+2025-02-25 19:36:44,284 - semiasync_server - INFO - The 61 round training done.
+2025-02-25 19:36:44,284 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:44,284 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:44,330 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 62 round,Outdated Updates: 61.0 round.
+2025-02-25 19:36:44,371 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 62 round,Outdated Updates: 61.0 round.
+2025-02-25 19:36:44,382 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 62 round,Outdated Updates: 61.0 round.
+2025-02-25 19:36:44,391 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 62 round,Outdated Updates: 61.0 round.
+2025-02-25 19:36:44,400 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 62 round,Outdated Updates: 61.0 round.
+2025-02-25 19:36:44,457 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 62 round,Outdated Updates: 61.0 round.
+2025-02-25 19:36:44,494 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 62 round,Outdated Updates: 61.0 round.
+2025-02-25 19:36:48,608 - semiasync_server - INFO - Received 4 updates in the 62 round .
+2025-02-25 19:36:48,614 - semiasync_server - INFO - The 62 round training done.
+2025-02-25 19:36:48,614 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:48,615 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:48,658 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 63 round,Outdated Updates: 62.0 round.
+2025-02-25 19:36:48,674 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 63 round,Outdated Updates: 62.0 round.
+2025-02-25 19:36:48,761 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 63 round,Outdated Updates: 62.0 round.
+2025-02-25 19:36:48,793 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 63 round,Outdated Updates: 62.0 round.
+2025-02-25 19:36:48,825 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 63 round,Outdated Updates: 62.0 round.
+2025-02-25 19:36:48,949 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 63 round,Outdated Updates: 62.0 round.
+2025-02-25 19:36:52,936 - semiasync_server - INFO - Received 4 updates in the 63 round .
+2025-02-25 19:36:52,941 - semiasync_server - INFO - The 63 round training done.
+2025-02-25 19:36:52,941 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:52,941 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:53,001 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 64 round,Outdated Updates: 63.0 round.
+2025-02-25 19:36:53,031 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 64 round,Outdated Updates: 63.0 round.
+2025-02-25 19:36:53,042 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 64 round,Outdated Updates: 63.0 round.
+2025-02-25 19:36:53,043 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 64 round,Outdated Updates: 63.0 round.
+2025-02-25 19:36:53,053 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 64 round,Outdated Updates: 63.0 round.
+2025-02-25 19:36:53,313 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 64 round,Outdated Updates: 63.0 round.
+2025-02-25 19:36:57,099 - semiasync_server - INFO - Received 2 updates in the 64 round .
+2025-02-25 19:36:57,287 - semiasync_server - INFO - Round [65/100] test performance on server: 	 Loss: 1.21817 	 Acc: 79.300%
+2025-02-25 19:36:57,292 - semiasync_server - INFO - The 64 round training done.
+2025-02-25 19:36:57,293 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:36:57,293 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:36:57,294 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:36:57,296 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:36:57,298 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:36:57,301 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:36:57,335 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:36:57,360 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:36:57,413 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:36:57,442 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 65 round,Outdated Updates: 64.0 round.
+2025-02-25 19:37:01,678 - semiasync_server - INFO - Received 1 updates in the 65 round .
+2025-02-25 19:37:01,683 - semiasync_server - INFO - The 65 round training done.
+2025-02-25 19:37:01,688 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:01,688 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:01,724 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,730 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,739 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,767 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,799 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,809 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,827 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,918 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:01,979 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 66 round,Outdated Updates: 65.0 round.
+2025-02-25 19:37:06,091 - semiasync_server - INFO - Received 5 updates in the 66 round .
+2025-02-25 19:37:06,098 - semiasync_server - INFO - The 66 round training done.
+2025-02-25 19:37:06,099 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:06,099 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:06,187 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 67 round,Outdated Updates: 66.0 round.
+2025-02-25 19:37:06,208 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 67 round,Outdated Updates: 66.0 round.
+2025-02-25 19:37:06,291 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 67 round,Outdated Updates: 66.0 round.
+2025-02-25 19:37:06,321 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 67 round,Outdated Updates: 66.0 round.
+2025-02-25 19:37:06,356 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 67 round,Outdated Updates: 66.0 round.
+2025-02-25 19:37:10,444 - semiasync_server - INFO - Received 6 updates in the 67 round .
+2025-02-25 19:37:10,450 - semiasync_server - INFO - The 67 round training done.
+2025-02-25 19:37:10,450 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:10,450 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:10,516 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 68 round,Outdated Updates: 67.0 round.
+2025-02-25 19:37:10,567 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 68 round,Outdated Updates: 67.0 round.
+2025-02-25 19:37:10,611 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 68 round,Outdated Updates: 67.0 round.
+2025-02-25 19:37:10,680 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 68 round,Outdated Updates: 67.0 round.
+2025-02-25 19:37:14,763 - semiasync_server - INFO - Received 3 updates in the 68 round .
+2025-02-25 19:37:14,765 - semiasync_server - INFO - The 68 round training done.
+2025-02-25 19:37:14,765 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:14,765 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:14,777 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 69 round,Outdated Updates: 68.0 round.
+2025-02-25 19:37:14,837 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 69 round,Outdated Updates: 68.0 round.
+2025-02-25 19:37:14,854 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 69 round,Outdated Updates: 68.0 round.
+2025-02-25 19:37:14,868 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 69 round,Outdated Updates: 68.0 round.
+2025-02-25 19:37:14,899 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 69 round,Outdated Updates: 68.0 round.
+2025-02-25 19:37:14,930 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 69 round,Outdated Updates: 68.0 round.
+2025-02-25 19:37:14,996 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 69 round,Outdated Updates: 68.0 round.
+2025-02-25 19:37:18,855 - semiasync_server - INFO - Received 1 updates in the 69 round .
+2025-02-25 19:37:19,089 - semiasync_server - INFO - Round [70/100] test performance on server: 	 Loss: 1.21371 	 Acc: 79.970%
+2025-02-25 19:37:19,095 - semiasync_server - INFO - The 69 round training done.
+2025-02-25 19:37:19,096 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:19,096 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:19,098 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,106 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,112 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,113 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,115 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,178 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,190 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,194 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:19,318 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 70 round,Outdated Updates: 69.0 round.
+2025-02-25 19:37:23,237 - semiasync_server - INFO - Received 1 updates in the 70 round .
+2025-02-25 19:37:23,238 - semiasync_server - INFO - The 70 round training done.
+2025-02-25 19:37:23,239 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:23,239 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:23,323 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,364 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,423 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,442 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,465 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,500 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,519 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,538 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:23,572 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 71 round,Outdated Updates: 70.0 round.
+2025-02-25 19:37:27,498 - semiasync_server - INFO - Received 1 updates in the 71 round .
+2025-02-25 19:37:27,500 - semiasync_server - INFO - The 71 round training done.
+2025-02-25 19:37:27,500 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:27,501 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:27,554 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,665 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,703 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,717 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,791 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,798 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,853 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,913 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:27,915 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 72 round,Outdated Updates: 71.0 round.
+2025-02-25 19:37:31,800 - semiasync_server - INFO - Received 4 updates in the 72 round .
+2025-02-25 19:37:31,805 - semiasync_server - INFO - The 72 round training done.
+2025-02-25 19:37:31,805 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:31,805 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:31,858 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 73 round,Outdated Updates: 72.0 round.
+2025-02-25 19:37:31,892 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 73 round,Outdated Updates: 72.0 round.
+2025-02-25 19:37:31,958 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 73 round,Outdated Updates: 72.0 round.
+2025-02-25 19:37:31,992 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 73 round,Outdated Updates: 72.0 round.
+2025-02-25 19:37:32,019 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 73 round,Outdated Updates: 72.0 round.
+2025-02-25 19:37:32,109 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 73 round,Outdated Updates: 72.0 round.
+2025-02-25 19:37:35,907 - semiasync_server - INFO - Received 3 updates in the 73 round .
+2025-02-25 19:37:35,910 - semiasync_server - INFO - The 73 round training done.
+2025-02-25 19:37:35,911 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:35,911 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:35,984 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 74 round,Outdated Updates: 73.0 round.
+2025-02-25 19:37:36,112 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 74 round,Outdated Updates: 73.0 round.
+2025-02-25 19:37:36,132 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 74 round,Outdated Updates: 73.0 round.
+2025-02-25 19:37:36,193 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 74 round,Outdated Updates: 73.0 round.
+2025-02-25 19:37:36,206 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 74 round,Outdated Updates: 73.0 round.
+2025-02-25 19:37:36,209 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 74 round,Outdated Updates: 73.0 round.
+2025-02-25 19:37:36,298 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 74 round,Outdated Updates: 73.0 round.
+2025-02-25 19:37:39,902 - semiasync_server - INFO - Received 2 updates in the 74 round .
+2025-02-25 19:37:40,171 - semiasync_server - INFO - Round [75/100] test performance on server: 	 Loss: 1.21041 	 Acc: 80.570%
+2025-02-25 19:37:40,176 - semiasync_server - INFO - The 74 round training done.
+2025-02-25 19:37:40,176 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:40,176 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:40,179 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:40,180 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:40,193 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:40,221 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:40,284 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:40,372 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:40,399 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:40,468 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 75 round,Outdated Updates: 74.0 round.
+2025-02-25 19:37:44,270 - semiasync_server - INFO - Received 1 updates in the 75 round .
+2025-02-25 19:37:44,271 - semiasync_server - INFO - The 75 round training done.
+2025-02-25 19:37:44,272 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:44,272 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:44,332 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,370 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,400 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,417 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,479 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,636 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,655 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,695 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:44,756 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 76 round,Outdated Updates: 75.0 round.
+2025-02-25 19:37:48,550 - semiasync_server - INFO - Received 1 updates in the 76 round .
+2025-02-25 19:37:48,552 - semiasync_server - INFO - The 76 round training done.
+2025-02-25 19:37:48,552 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:48,552 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:48,710 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:48,757 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:48,835 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:48,890 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:48,922 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:48,933 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:48,944 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:49,017 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:49,060 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 77 round,Outdated Updates: 76.0 round.
+2025-02-25 19:37:52,916 - semiasync_server - INFO - Received 3 updates in the 77 round .
+2025-02-25 19:37:52,920 - semiasync_server - INFO - The 77 round training done.
+2025-02-25 19:37:52,920 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:52,920 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:53,003 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 78 round,Outdated Updates: 77.0 round.
+2025-02-25 19:37:53,028 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 78 round,Outdated Updates: 77.0 round.
+2025-02-25 19:37:53,039 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 78 round,Outdated Updates: 77.0 round.
+2025-02-25 19:37:53,087 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 78 round,Outdated Updates: 77.0 round.
+2025-02-25 19:37:53,108 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 78 round,Outdated Updates: 77.0 round.
+2025-02-25 19:37:53,144 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 78 round,Outdated Updates: 77.0 round.
+2025-02-25 19:37:53,180 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 78 round,Outdated Updates: 77.0 round.
+2025-02-25 19:37:56,802 - semiasync_server - INFO - Received 1 updates in the 78 round .
+2025-02-25 19:37:56,804 - semiasync_server - INFO - The 78 round training done.
+2025-02-25 19:37:56,805 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:37:56,805 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:37:56,807 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,379 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,384 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,430 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,443 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,472 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,525 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,540 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:37:57,557 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 79 round,Outdated Updates: 78.0 round.
+2025-02-25 19:38:00,972 - semiasync_server - INFO - Received 3 updates in the 79 round .
+2025-02-25 19:38:01,216 - semiasync_server - INFO - Round [80/100] test performance on server: 	 Loss: 1.21040 	 Acc: 80.990%
+2025-02-25 19:38:01,221 - semiasync_server - INFO - The 79 round training done.
+2025-02-25 19:38:01,222 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:01,222 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:01,224 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 80 round,Outdated Updates: 79.0 round.
+2025-02-25 19:38:01,225 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 80 round,Outdated Updates: 79.0 round.
+2025-02-25 19:38:01,248 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 80 round,Outdated Updates: 79.0 round.
+2025-02-25 19:38:01,264 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 80 round,Outdated Updates: 79.0 round.
+2025-02-25 19:38:01,309 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 80 round,Outdated Updates: 79.0 round.
+2025-02-25 19:38:01,392 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 80 round,Outdated Updates: 79.0 round.
+2025-02-25 19:38:01,429 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 80 round,Outdated Updates: 79.0 round.
+2025-02-25 19:38:05,402 - semiasync_server - INFO - Received 1 updates in the 80 round .
+2025-02-25 19:38:05,404 - semiasync_server - INFO - The 80 round training done.
+2025-02-25 19:38:05,404 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:05,404 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:05,432 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,488 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,510 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,591 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,600 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,614 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,643 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,691 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:05,792 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 81 round,Outdated Updates: 80.0 round.
+2025-02-25 19:38:09,683 - semiasync_server - INFO - Received 3 updates in the 81 round .
+2025-02-25 19:38:09,686 - semiasync_server - INFO - The 81 round training done.
+2025-02-25 19:38:09,686 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:09,687 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:09,778 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 82 round,Outdated Updates: 81.0 round.
+2025-02-25 19:38:09,819 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 82 round,Outdated Updates: 81.0 round.
+2025-02-25 19:38:09,877 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 82 round,Outdated Updates: 81.0 round.
+2025-02-25 19:38:09,941 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 82 round,Outdated Updates: 81.0 round.
+2025-02-25 19:38:09,950 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 82 round,Outdated Updates: 81.0 round.
+2025-02-25 19:38:09,984 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 82 round,Outdated Updates: 81.0 round.
+2025-02-25 19:38:10,020 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 82 round,Outdated Updates: 81.0 round.
+2025-02-25 19:38:14,055 - semiasync_server - INFO - Received 4 updates in the 82 round .
+2025-02-25 19:38:14,061 - semiasync_server - INFO - The 82 round training done.
+2025-02-25 19:38:14,061 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:14,062 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:14,063 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 83 round,Outdated Updates: 82.0 round.
+2025-02-25 19:38:14,112 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 83 round,Outdated Updates: 82.0 round.
+2025-02-25 19:38:14,124 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 83 round,Outdated Updates: 82.0 round.
+2025-02-25 19:38:14,159 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 83 round,Outdated Updates: 82.0 round.
+2025-02-25 19:38:14,202 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 83 round,Outdated Updates: 82.0 round.
+2025-02-25 19:38:14,214 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 83 round,Outdated Updates: 82.0 round.
+2025-02-25 19:38:18,082 - semiasync_server - INFO - Received 1 updates in the 83 round .
+2025-02-25 19:38:18,083 - semiasync_server - INFO - The 83 round training done.
+2025-02-25 19:38:18,083 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:18,083 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:18,107 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,204 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,269 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,321 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,356 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,408 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,451 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,554 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:18,576 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 84 round,Outdated Updates: 83.0 round.
+2025-02-25 19:38:22,305 - semiasync_server - INFO - Received 4 updates in the 84 round .
+2025-02-25 19:38:22,477 - semiasync_server - INFO - Round [85/100] test performance on server: 	 Loss: 1.21091 	 Acc: 81.490%
+2025-02-25 19:38:22,483 - semiasync_server - INFO - The 84 round training done.
+2025-02-25 19:38:22,483 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:22,483 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:22,486 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 85 round,Outdated Updates: 84.0 round.
+2025-02-25 19:38:22,489 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 85 round,Outdated Updates: 84.0 round.
+2025-02-25 19:38:22,496 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 85 round,Outdated Updates: 84.0 round.
+2025-02-25 19:38:22,520 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 85 round,Outdated Updates: 84.0 round.
+2025-02-25 19:38:22,595 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 85 round,Outdated Updates: 84.0 round.
+2025-02-25 19:38:22,614 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 85 round,Outdated Updates: 84.0 round.
+2025-02-25 19:38:26,759 - semiasync_server - INFO - Received 1 updates in the 85 round .
+2025-02-25 19:38:26,761 - semiasync_server - INFO - The 85 round training done.
+2025-02-25 19:38:26,761 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:26,761 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:26,783 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:26,792 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:26,833 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:26,850 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:26,895 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:26,923 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:26,938 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:26,943 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:27,035 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 86 round,Outdated Updates: 85.0 round.
+2025-02-25 19:38:31,051 - semiasync_server - INFO - Received 4 updates in the 86 round .
+2025-02-25 19:38:31,057 - semiasync_server - INFO - The 86 round training done.
+2025-02-25 19:38:31,057 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:31,057 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:31,085 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 87 round,Outdated Updates: 86.0 round.
+2025-02-25 19:38:31,135 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 87 round,Outdated Updates: 86.0 round.
+2025-02-25 19:38:31,236 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 87 round,Outdated Updates: 86.0 round.
+2025-02-25 19:38:31,301 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 87 round,Outdated Updates: 86.0 round.
+2025-02-25 19:38:31,321 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 87 round,Outdated Updates: 86.0 round.
+2025-02-25 19:38:31,354 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 87 round,Outdated Updates: 86.0 round.
+2025-02-25 19:38:35,280 - semiasync_server - INFO - Received 5 updates in the 87 round .
+2025-02-25 19:38:35,285 - semiasync_server - INFO - The 87 round training done.
+2025-02-25 19:38:35,285 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:35,286 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:35,324 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 88 round,Outdated Updates: 87.0 round.
+2025-02-25 19:38:35,408 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 88 round,Outdated Updates: 87.0 round.
+2025-02-25 19:38:35,421 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 88 round,Outdated Updates: 87.0 round.
+2025-02-25 19:38:35,474 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 88 round,Outdated Updates: 87.0 round.
+2025-02-25 19:38:35,557 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 88 round,Outdated Updates: 87.0 round.
+2025-02-25 19:38:39,541 - semiasync_server - INFO - Received 3 updates in the 88 round .
+2025-02-25 19:38:39,546 - semiasync_server - INFO - The 88 round training done.
+2025-02-25 19:38:39,546 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:39,546 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:39,570 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 89 round,Outdated Updates: 88.0 round.
+2025-02-25 19:38:39,597 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 89 round,Outdated Updates: 88.0 round.
+2025-02-25 19:38:39,636 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 89 round,Outdated Updates: 88.0 round.
+2025-02-25 19:38:39,685 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 89 round,Outdated Updates: 88.0 round.
+2025-02-25 19:38:39,716 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 89 round,Outdated Updates: 88.0 round.
+2025-02-25 19:38:39,892 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 89 round,Outdated Updates: 88.0 round.
+2025-02-25 19:38:39,968 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 89 round,Outdated Updates: 88.0 round.
+2025-02-25 19:38:43,692 - semiasync_server - INFO - Received 1 updates in the 89 round .
+2025-02-25 19:38:43,919 - semiasync_server - INFO - Round [90/100] test performance on server: 	 Loss: 1.21433 	 Acc: 81.860%
+2025-02-25 19:38:43,924 - semiasync_server - INFO - The 89 round training done.
+2025-02-25 19:38:43,925 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:43,925 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:43,926 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:43,928 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:43,929 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:43,931 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:43,932 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:43,934 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:43,938 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:44,063 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:44,184 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 90 round,Outdated Updates: 89.0 round.
+2025-02-25 19:38:48,180 - semiasync_server - INFO - Received 2 updates in the 90 round .
+2025-02-25 19:38:48,186 - semiasync_server - INFO - The 90 round training done.
+2025-02-25 19:38:48,186 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:48,187 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:48,188 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:48,216 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:48,221 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:48,238 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:48,264 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:48,266 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:48,304 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:48,476 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 91 round,Outdated Updates: 90.0 round.
+2025-02-25 19:38:52,491 - semiasync_server - INFO - Received 1 updates in the 91 round .
+2025-02-25 19:38:52,493 - semiasync_server - INFO - The 91 round training done.
+2025-02-25 19:38:52,493 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:52,493 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:52,495 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,533 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,611 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,627 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,640 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,687 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,744 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,856 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:52,994 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 92 round,Outdated Updates: 91.0 round.
+2025-02-25 19:38:56,864 - semiasync_server - INFO - Received 8 updates in the 92 round .
+2025-02-25 19:38:56,871 - semiasync_server - INFO - The 92 round training done.
+2025-02-25 19:38:56,871 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:38:56,871 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:38:57,007 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 93 round,Outdated Updates: 92.0 round.
+2025-02-25 19:38:57,113 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 93 round,Outdated Updates: 92.0 round.
+2025-02-25 19:39:01,046 - semiasync_server - INFO - Received 1 updates in the 93 round .
+2025-02-25 19:39:01,047 - semiasync_server - INFO - The 93 round training done.
+2025-02-25 19:39:01,048 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:39:01,048 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:39:01,152 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,294 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,334 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,358 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,360 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,462 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,535 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,555 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:01,638 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 94 round,Outdated Updates: 93.0 round.
+2025-02-25 19:39:05,285 - semiasync_server - INFO - Received 2 updates in the 94 round .
+2025-02-25 19:39:05,447 - semiasync_server - INFO - Round [95/100] test performance on server: 	 Loss: 1.22018 	 Acc: 82.090%
+2025-02-25 19:39:05,452 - semiasync_server - INFO - The 94 round training done.
+2025-02-25 19:39:05,452 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:39:05,452 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:39:05,454 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:05,545 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:05,609 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:05,649 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:05,660 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:05,758 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:05,768 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:05,830 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 95 round,Outdated Updates: 94.0 round.
+2025-02-25 19:39:09,717 - semiasync_server - INFO - Received 5 updates in the 95 round .
+2025-02-25 19:39:09,722 - semiasync_server - INFO - The 95 round training done.
+2025-02-25 19:39:09,722 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:39:09,723 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:39:09,781 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 96 round,Outdated Updates: 95.0 round.
+2025-02-25 19:39:09,792 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 96 round,Outdated Updates: 95.0 round.
+2025-02-25 19:39:09,842 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 96 round,Outdated Updates: 95.0 round.
+2025-02-25 19:39:09,893 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 96 round,Outdated Updates: 95.0 round.
+2025-02-25 19:39:09,995 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 96 round,Outdated Updates: 95.0 round.
+2025-02-25 19:39:14,047 - semiasync_server - INFO - Received 1 updates in the 96 round .
+2025-02-25 19:39:14,047 - semiasync_server - INFO - The 96 round training done.
+2025-02-25 19:39:14,048 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:39:14,048 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:39:14,075 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,104 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,109 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,118 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,153 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,187 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,247 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,286 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:14,299 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 97 round,Outdated Updates: 96.0 round.
+2025-02-25 19:39:18,444 - semiasync_server - INFO - Received 4 updates in the 97 round .
+2025-02-25 19:39:18,446 - semiasync_server - INFO - The 97 round training done.
+2025-02-25 19:39:18,446 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:39:18,446 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:39:18,480 - semiasync_server - INFO - Received outdated updates from client 3,Current Model: 98 round,Outdated Updates: 97.0 round.
+2025-02-25 19:39:18,551 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 98 round,Outdated Updates: 97.0 round.
+2025-02-25 19:39:18,557 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 98 round,Outdated Updates: 97.0 round.
+2025-02-25 19:39:18,567 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 98 round,Outdated Updates: 97.0 round.
+2025-02-25 19:39:18,588 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 98 round,Outdated Updates: 97.0 round.
+2025-02-25 19:39:18,624 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 98 round,Outdated Updates: 97.0 round.
+2025-02-25 19:39:22,751 - semiasync_server - INFO - Received 1 updates in the 98 round .
+2025-02-25 19:39:22,752 - semiasync_server - INFO - The 98 round training done.
+2025-02-25 19:39:22,753 - semiasync_server - INFO - Client activation procedure
+2025-02-25 19:39:22,753 - semiasync_server - INFO - Client id list: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9)]
+2025-02-25 19:39:22,766 - semiasync_server - INFO - Received outdated updates from client 8,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:22,823 - semiasync_server - INFO - Received outdated updates from client 5,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:22,831 - semiasync_server - INFO - Received outdated updates from client 9,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:22,845 - semiasync_server - INFO - Received outdated updates from client 1,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:22,858 - semiasync_server - INFO - Received outdated updates from client 6,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:22,880 - semiasync_server - INFO - Received outdated updates from client 2,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:22,910 - semiasync_server - INFO - Received outdated updates from client 4,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:22,995 - semiasync_server - INFO - Received outdated updates from client 7,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:23,140 - semiasync_server - INFO - Received outdated updates from client 10,Current Model: 99 round,Outdated Updates: 98.0 round.
+2025-02-25 19:39:27,216 - semiasync_server - INFO - Received 3 updates in the 99 round .
+2025-02-25 19:39:27,462 - semiasync_server - INFO - Round [100/100] test performance on server: 	 Loss: 1.22679 	 Acc: 82.300%
+2025-02-25 19:39:27,470 - semiasync_server - INFO - The 99 round training done.
+2025-02-25 19:39:27,470 - semiasync_server - INFO - Global Training done.
+2025-02-25 19:39:27,470 - semiasync_server - INFO - Total time cost: 424.87265181541443s
+2025-02-25 19:39:27,470 - semiasync_server - INFO - Client shutdown procedure.

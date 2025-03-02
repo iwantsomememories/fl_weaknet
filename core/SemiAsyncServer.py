@@ -186,6 +186,7 @@ class SemiAsyncServerManager(ServerManager):
                 self.client_time_delay = []
             
             self._LOGGER.info(f"The {self._handler.round - 1} round training done.")
+            self._LOGGER.info(f"The time_window of the {self._handler.round} round is {self.time_window}")
         
         self._LOGGER.info("Global Training done.")
         self._LOGGER.info("Total time cost: {}s".format(time.time() - self.global_start_time))
