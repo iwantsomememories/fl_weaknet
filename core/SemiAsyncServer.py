@@ -177,7 +177,7 @@ class SemiAsyncServerManager(ServerManager):
                     raise Exception(
                         "Unexpected message code {}".format(message_code))
             
-            self._LOGGER.info(f"Received {len(self.client_time_delay)} updates in the {self._handler.round} round .")
+            self._LOGGER.info(f"The {self._handler.round} round: received {len(self.client_time_delay)} updates.")
             
             self._handler.global_update()
             # 设置时间窗口

@@ -16,6 +16,8 @@ import numpy as np
 
 sys.path.append("../../")
 
+from utils.ComunicationDelay import DelayGenerator, HighDelayWithHighError
+
 from fedlab.core.client.manager import ClientManager, PassiveClientManager
 from fedlab.core.network import DistNetwork
 from fedlab.utils import MessageCode, Logger, SerializationTool
@@ -25,6 +27,7 @@ from fedlab.contrib.algorithm.fedavg import FedAvgClientTrainer
 from fedlab.contrib.algorithm.basic_client import SGDClientTrainer
 from fedlab.core.model_maintainer import ModelMaintainer
 from fedlab.models import CNN_CIFAR10, CNN_FEMNIST, CNN_MNIST
+
 
 
 class SemiAsyncClientTrainer(SGDClientTrainer):
@@ -83,12 +86,11 @@ class SemiAsyncClientManager(ClientManager):
                 network: DistNetwork,
                 trainer: ModelMaintainer,
                 logger: Logger=None,
-                com_delay_mean: float=None,
-                com_delay_std: float=None):
+                delay_gen: DelayGenerator=None):
         super().__init__(network, trainer)
+        self.delay_gen = delay_gen
         self._LOGGER = Logger() if logger is None else logger
-        self.com_delay_mean = com_delay_mean
-        self.com_delay_std = com_delay_std
+
     
     def main_loop(self):
         while True:
@@ -122,7 +124,7 @@ class SemiAsyncClientManager(ClientManager):
         self._LOGGER.info("Uploading information to server.")
 
         # 模拟通信时延
-        actual_delay = np.random.normal(self.com_delay_mean, self.com_delay_std, 1)[0]
+        actual_delay = self.delay_gen.generate_delay()
         time.sleep(actual_delay)
 
         self._network.send(content=self._trainer.uplink_package,
@@ -165,5 +167,5 @@ if __name__ == "__main__":
     trainer.setup_dataset(dataset)
     trainer.setup_optim(args.epochs, args.batch_size, args.lr)
     
-    manager = SemiAsyncClientManager(network=network, trainer=trainer, com_delay_mean=1, com_delay_std=0.1)
+    manager = SemiAsyncClientManager(network=network, trainer=trainer, delay_gen=HighDelayWithHighError())
     manager.run()
