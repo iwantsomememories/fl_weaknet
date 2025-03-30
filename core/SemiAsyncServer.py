@@ -161,7 +161,7 @@ class SemiAsyncServerManager(ServerManager):
 
             start_time = time.time()
             # 在时间窗口内等待
-            while self.time_window == None or time.time() - start_time < self.time_window:
+            while self.time_window == None or time.time() - start_time < self.time_window or len(self.client_time_delay) == 0:
                 sender_rank, message_code, payload = self._network.recv()
                 if message_code == MessageCode.ParameterUpdate:
                     model_version = payload[1].item()
@@ -179,11 +179,15 @@ class SemiAsyncServerManager(ServerManager):
             
             self._LOGGER.info(f"The {self._handler.round} round: received {len(self.client_time_delay)} updates.")
             
-            self._handler.global_update()
+            if len(self.client_time_delay) > 0:
+                self._handler.global_update()
             # 设置时间窗口
-            if self.tw_setting != None and len(self.client_time_delay) > 0:
-                self.time_window = self.tw_setting(self.client_time_delay)
-                self.client_time_delay = []
+                if self.tw_setting != None:
+                    self.time_window = self.tw_setting(self.client_time_delay)
+                    self.client_time_delay = []
+            else:
+                self.time_window *= 2
+                self._LOGGER.info(f"Time window is too short, double the time window to {self.time_window}.")
             
             self._LOGGER.info(f"The {self._handler.round - 1} round training done.")
             self._LOGGER.info(f"The time_window of the {self._handler.round} round is {self.time_window}")
@@ -203,12 +207,39 @@ class SemiAsyncServerManager(ServerManager):
         self._LOGGER.info("Client id list: {}".format(clients_this_round))
         # print(rank_dict)
 
+        # Log downlink_package content
+        downlink_package = self._handler.downlink_package
+        self._LOGGER.info(f"Downlink package length: {len(downlink_package)}")
+        for i, tensor in enumerate(downlink_package):
+            self._LOGGER.info(f"Tensor {i}: shape {tensor.shape}, dtype {tensor.dtype}")
+
         for rank, values in rank_dict.items():
-            downlink_package = self._handler.downlink_package
+            self._LOGGER.info(f"Preparing data for rank {rank}, client IDs: {values}")
+
+            # Ensure values is not empty
+            if not values:
+                self._LOGGER.warning(f"No clients mapped to rank {rank}, skipping")
+                continue
+
             id_list = torch.Tensor(values).to(downlink_package[0].dtype)
-            self._network.send(content=[id_list] + downlink_package,
-                               message_code=MessageCode.ParameterUpdate,
-                               dst=rank)
+            self._LOGGER.info(f"ID list shape: {id_list.shape}, dtype: {id_list.dtype}")
+
+            # Prepare send content and validate
+            send_content = [id_list] + downlink_package
+            self._LOGGER.info(f"Sending to rank {rank}, content length: {len(send_content)}")
+            for i, item in enumerate(send_content):
+                if isinstance(item, torch.Tensor):
+                    self._LOGGER.info(f"Item {i}: tensor shape {item.shape}")
+                else:
+                    self._LOGGER.info(f"Item {i}: {type(item)}")
+
+            # Send data
+            self._network.send(
+                content=send_content,
+                message_code=MessageCode.ParameterUpdate,
+                dst=rank
+            )
+            self._LOGGER.info(f"Data sent to rank {rank}")
 
     def shutdown_clients(self):
         client_list = range(self._handler.num_clients)

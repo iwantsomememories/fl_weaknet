@@ -8,7 +8,7 @@ class DelayGenerator:
         assert error_upper < 1
         assert delay_lower > 0
         assert delay_lower < delay_upper
-        assert delay_upper < 10
+        assert delay_upper <= 10
 
         self.delay_lower = delay_lower
         self.delay_upper = delay_upper
@@ -25,17 +25,17 @@ class DelayGenerator:
         return total_delay
 
 def LowDelayWithLowError():
-    delay = DelayGenerator(1, 5, 0.01, 0.05)
+    delay = DelayGenerator(0.1, 2.0, 0.01, 0.1)
     return delay
 
 def HighDelayWithLowError():
-    delay = DelayGenerator(5, 10, 0.01, 0.05)
+    delay = DelayGenerator(1.0, 4.0, 0.01, 0.1)
     return delay
 
 def HighDelayWithHighError():
-    delay = DelayGenerator(5, 10, 0.1, 0.5)
+    delay = DelayGenerator(1.0, 4.0, 0.1, 0.3)
     return delay
 
 def LowDelayWithHighError():
-    delay = DelayGenerator(1, 5, 0.1, 0.5)
+    delay = DelayGenerator(0.1, 2.0, 0.1, 0.3)
     return delay
