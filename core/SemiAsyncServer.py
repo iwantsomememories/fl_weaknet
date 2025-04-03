@@ -3,7 +3,6 @@ import sys
 import torch
 from torch import nn
 import time
-import threading
 import os
 import h5py
 
@@ -12,8 +11,11 @@ sys.path.append("../../")
 from typing import List
 from copy import deepcopy
 from datetime import datetime
+from threading import Thread, Event
+import queue
 
 from utils.TimeWindowSetting import TimeWindow
+from utils.NetworkWrapper import AsyncNetworkWrapper
 
 from fedlab.utils import MessageCode, Logger
 from fedlab.contrib.algorithm.fedavg import FedAvgServerHandler
@@ -29,7 +31,8 @@ from fedlab.contrib.client_sampler.uniform_sampler import RandomSampler
 from fedlab.contrib.dataset.pathological_mnist import PathologicalMNIST
 from fedlab.models import CNN_CIFAR10, CNN_FEMNIST, CNN_MNIST
 
-
+POLL_TIMEOUT = 1.0
+# Polling timeout for receiving messages
 
 class SemiAsyncServerHandler(ServerHandler):
     def __init__(
@@ -132,7 +135,6 @@ class SemiAsyncServerHandler(ServerHandler):
 
         return loss_, acc_
 
-
 class SemiAsyncServerManager(ServerManager):
     def __init__(
             self,
@@ -152,25 +154,41 @@ class SemiAsyncServerManager(ServerManager):
         self.client_time_delay = []
         self.tw_setting = tw_setting
 
+        # 该列表用于记录当前正在进行训练的客户端的rank
+        self.busy_clients = set()
+
+        # 该字典用于记录每个客户端的最后激活时间
+        self.last_activate_time = {}
+
     def main_loop(self):
         self.global_start_time = time.time()
+        async_network_wrapper = AsyncNetworkWrapper(self._network)
 
         while self._handler.if_stop is not True:
-            activator = threading.Thread(target=self.activate_clients)
-            activator.start()
+            # activator = threading.Thread(target=self.activate_clients)
+            # activator.start()
+            self.activate_clients()
 
             start_time = time.time()
             # 在时间窗口内等待
-            while self.time_window == None or time.time() - start_time < self.time_window or len(self.client_time_delay) == 0:
-                sender_rank, message_code, payload = self._network.recv()
+            while self.time_window == None or time.time() - start_time < self.time_window:
+                sender_rank, message_code, payload = async_network_wrapper.recv_with_timeout(POLL_TIMEOUT)
+                if sender_rank is None:
+                    continue
                 if message_code == MessageCode.ParameterUpdate:
+                    # 接收到客户端更新，表示训练结束
+                    if sender_rank in self.busy_clients:
+                        self.busy_clients.remove(sender_rank)
+
                     model_version = payload[1].item()
                     if model_version < self._handler.round:
+                        # 接收到过时的更新
                         self._LOGGER.info(f"Received outdated updates from client {sender_rank},"
                                           f"Current Model: {self._handler.round} round,"
                                           f"Outdated Updates: {model_version} round.")
                     else:
-                        self.client_time_delay.append(time.time() - start_time)
+                        assert self.last_activate_time.get(sender_rank) is not None
+                        self.client_time_delay.append(time.time() - self.last_activate_time[sender_rank])
                         if self._handler.load(payload):
                             break
                 else:
@@ -181,19 +199,30 @@ class SemiAsyncServerManager(ServerManager):
             
             if len(self.client_time_delay) > 0:
                 self._handler.global_update()
-            # 设置时间窗口
+                # 设置时间窗口
                 if self.tw_setting != None:
                     self.time_window = self.tw_setting(self.client_time_delay)
                     self.client_time_delay = []
+                self._LOGGER.info(f"The {self._handler.round - 1} round training done.")
+                self._LOGGER.info(f"The time_window of the {self._handler.round} round is {self.time_window}")
             else:
-                self.time_window *= 2
-                self._LOGGER.info(f"Time window is too short, double the time window to {self.time_window}.")
-            
-            self._LOGGER.info(f"The {self._handler.round - 1} round training done.")
-            self._LOGGER.info(f"The time_window of the {self._handler.round} round is {self.time_window}")
+                # 本轮没有收到客户端更新
+                self._LOGGER.info(f"No updates received, keep waiting for clients.")
         
         self._LOGGER.info("Global Training done.")
         self._LOGGER.info("Total time cost: {}s".format(time.time() - self.global_start_time))
+
+        unprocessed_messages  = async_network_wrapper.shutdown()
+        for (sender_rank, message_code, payload) in unprocessed_messages:
+            if message_code == MessageCode.ParameterUpdate:
+                self.busy_clients.remove(sender_rank)
+
+        # 等待所有客户端完成训练
+        while len(self.busy_clients) > 0:
+            sender_rank, message_code, payload = self._network.recv()
+            if message_code == MessageCode.ParameterUpdate:
+                if sender_rank in self.busy_clients:
+                    self.busy_clients.remove(sender_rank)
 
     def shutdown(self):
         self.shutdown_clients()
@@ -207,15 +236,17 @@ class SemiAsyncServerManager(ServerManager):
         self._LOGGER.info("Client id list: {}".format(clients_this_round))
         # print(rank_dict)
 
-        # Log downlink_package content
         downlink_package = self._handler.downlink_package
-        self._LOGGER.info(f"Downlink package length: {len(downlink_package)}")
-        for i, tensor in enumerate(downlink_package):
-            self._LOGGER.info(f"Tensor {i}: shape {tensor.shape}, dtype {tensor.dtype}")
+        # self._LOGGER.info(f"Downlink package length: {len(downlink_package)}")
+        # for i, tensor in enumerate(downlink_package):
+        #     self._LOGGER.info(f"Tensor {i}: shape {tensor.shape}, dtype {tensor.dtype}")
 
         for rank, values in rank_dict.items():
-            self._LOGGER.info(f"Preparing data for rank {rank}, client IDs: {values}")
+            # 跳过仍在训练中的客户端
+            if rank in self.busy_clients:
+                continue
 
+            self._LOGGER.info(f"Preparing data for rank {rank}, client IDs: {values}")
             # Ensure values is not empty
             if not values:
                 self._LOGGER.warning(f"No clients mapped to rank {rank}, skipping")
@@ -226,19 +257,24 @@ class SemiAsyncServerManager(ServerManager):
 
             # Prepare send content and validate
             send_content = [id_list] + downlink_package
-            self._LOGGER.info(f"Sending to rank {rank}, content length: {len(send_content)}")
-            for i, item in enumerate(send_content):
-                if isinstance(item, torch.Tensor):
-                    self._LOGGER.info(f"Item {i}: tensor shape {item.shape}")
-                else:
-                    self._LOGGER.info(f"Item {i}: {type(item)}")
+            # self._LOGGER.info(f"Sending to rank {rank}, content length: {len(send_content)}")
+            # for i, item in enumerate(send_content):
+            #     if isinstance(item, torch.Tensor):
+            #         self._LOGGER.info(f"Item {i}: tensor shape {item.shape}")
+            #     else:
+            #         self._LOGGER.info(f"Item {i}: {type(item)}")
 
-            # Send data
+            # 将参与训练的客户端标记为忙碌
+            self.busy_clients.add(rank)
+
+            # 发送数据
             self._network.send(
                 content=send_content,
                 message_code=MessageCode.ParameterUpdate,
                 dst=rank
             )
+            # 记录最后激活时间
+            self.last_activate_time[rank] = time.time()
             self._LOGGER.info(f"Data sent to rank {rank}")
 
     def shutdown_clients(self):

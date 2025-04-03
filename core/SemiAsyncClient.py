@@ -48,14 +48,14 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
         model_parameters = payload[0]
         self.model_version = payload[1]
 
-        # print("model_parameters: ", model_parameters)
-        print("Client {} received model version {}".format(id, self.model_version))
+        # # print("model_parameters: ", model_parameters)
+        # print("Client {} received model version {}".format(id, self.model_version))
 
         train_loader = self.dataset.get_dataloader(id, self.batch_size)
 
-        print("Client {} is training...".format(id))
+        # print("Client {} is training...".format(id))
         self.train(model_parameters, train_loader)
-        print("Client {} finished training.".format(id))
+        # print("Client {} finished training.".format(id))
     
     def train(self, model_parameters, train_loader) -> None:
         """Client trains its local model on local dataset.
@@ -112,6 +112,7 @@ class SemiAsyncClientManager(ClientManager):
                 #     print(item.shape)
                 #     print(item)
                 self._trainer.local_process(payload=payload, id=id_list[0])
+                self._LOGGER.info("Finished local process, model version: {}".format(self._trainer.model_version))
 
                 self.synchronize()
 
