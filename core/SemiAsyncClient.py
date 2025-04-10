@@ -16,7 +16,8 @@ import numpy as np
 
 sys.path.append("../../")
 
-from utils.ComunicationDelay import DelayGenerator, HighDelayWithHighError
+from utils.ComunicationDelay import MultiModeDelayGenerator, DelayGenerator
+from utils.Datasets import CompletePartitionedMNIST
 
 from fedlab.core.client.manager import ClientManager, PassiveClientManager
 from fedlab.core.network import DistNetwork
@@ -42,7 +43,13 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
     
     @property
     def uplink_package(self):
-        return [self.model_parameters, self.model_version]
+        return [self.model_parameters, self.model_version, torch.tensor(self.data_size).to(self.model_parameters.dtype)]
+
+    def setup_dataset(self, dataset: CompletePartitionedMNIST, client_id):
+        self.dataset = dataset
+        self.data_size = len(dataset.get_dataset(cid=client_id, type="train"))
+        self.data_id = client_id
+        self._LOGGER.info("Data size of {}: {}".format(client_id, self.data_size))
     
     def local_process(self, payload, id):
         model_parameters = payload[0]
@@ -51,7 +58,7 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
         # # print("model_parameters: ", model_parameters)
         # print("Client {} received model version {}".format(id, self.model_version))
 
-        train_loader = self.dataset.get_dataloader(id, self.batch_size)
+        train_loader = self.dataset.get_dataloader(cid=self.data_id, batch_size=self.batch_size)
 
         # print("Client {} is training...".format(id))
         self.train(model_parameters, train_loader)
@@ -103,15 +110,11 @@ class SemiAsyncClientManager(ClientManager):
                 break
 
             elif message_code == MessageCode.ParameterUpdate:
-                id_list, payload = payload[0].to(
-                    torch.int32).tolist(), payload[1:]
+                # id_list, payload = payload[0].to(
+                #     torch.int32).tolist(), payload[1:]
 
-                assert len(id_list) == 1
-
-                # for item in payload:
-                #     print(item.shape)
-                #     print(item)
-                self._trainer.local_process(payload=payload, id=id_list[0])
+                # assert len(id_list) == 1
+                self._trainer.local_process(payload=payload, id=self._trainer.data_id)
                 self._LOGGER.info("Finished local process, model version: {}".format(self._trainer.model_version))
 
                 self.synchronize()
@@ -138,19 +141,29 @@ if __name__ == "__main__":
 
     parser.add_argument('--ip', type=str, default='127.0.0.1')
     parser.add_argument('--port', type=str, default='3009')
-    parser.add_argument('--world_size', type=int, default=11)
-    parser.add_argument('--rank', type=int)
     parser.add_argument("--ethernet", type=str, default=None)
 
+    parser.add_argument('--world_size', type=int, default=11)
+    parser.add_argument('--num_clients', type=int, default=10)
+    parser.add_argument('--rank', type=int)
+
     parser.add_argument("--epochs", type=int, default=5)
-    parser.add_argument("--lr", type=float, default=0.001)
+    parser.add_argument("--lr", type=float, default=0.01)
     parser.add_argument("--batch_size", type=int, default=32)
+
     parser.add_argument('--model', type=str, default="mnist")
+    parser.add_argument('--partition', type=str, default="iid", choices=["iid", "noniid-labeldir"])
+    parser.add_argument('--dir_alpha', type=float, default=0.5)
+    parser.add_argument('--seed', type=int, default=0)
+
     args = parser.parse_args()
 
     if args.model == "mnist":
         model = CNN_MNIST()
-        dataset = PathologicalMNIST(root='../datasets/mnist/', path="../datasets/mnist/")
+        if args.partition == "iid":
+            dataset = CompletePartitionedMNIST(root='../datasets/mnist/', path="../datasets/mnist/", num_clients=args.num_clients, partition="iid")
+        else:
+            dataset = CompletePartitionedMNIST(root='../datasets/mnist/', path="../datasets/mnist/", num_clients=args.num_clients,  partition="noniid-labeldir", dir_alpha=args.dir_alpha, seed=args.seed)
     else:
         raise NotImplementedError
 
@@ -165,8 +178,12 @@ if __name__ == "__main__":
     # LOGGER = Logger(log_name="semiasync_client " + str(args.rank), log_file="../logs/semiasync_client_" + datetime.now().strftime("%Y%m%d%H%M%S") + ".log")
 
     trainer = SemiAsyncClientTrainer(model, cuda=torch.cuda.is_available())
-    trainer.setup_dataset(dataset)
+
+    print("rank: ", args.rank)
+    trainer.setup_dataset(dataset, args.rank - 1)
     trainer.setup_optim(args.epochs, args.batch_size, args.lr)
+
+    factory = MultiModeDelayGenerator()
     
-    manager = SemiAsyncClientManager(network=network, trainer=trainer, delay_gen=HighDelayWithHighError())
+    manager = SemiAsyncClientManager(network=network, trainer=trainer, delay_gen=factory.get_generator())
     manager.run()

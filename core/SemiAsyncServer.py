@@ -16,6 +16,7 @@ import queue
 
 from utils.TimeWindowSetting import TimeWindow
 from utils.NetworkWrapper import AsyncNetworkWrapper
+from utils.Datasets import CompletePartitionedMNIST
 
 from fedlab.utils import MessageCode, Logger
 from fedlab.contrib.algorithm.fedavg import FedAvgServerHandler
@@ -98,7 +99,8 @@ class SemiAsyncServerHandler(ServerHandler):
         # 更新全局模型，同时更新相关训练数据;
         # 此外，根据eval_gap定期评估模型
         parameters_list = [ele[0] for ele in self.client_buffer_cache]
-        serialized_parameters = Aggregators.fedavg_aggregate(parameters_list)
+        weights = [ele[2] for ele in self.client_buffer_cache]
+        serialized_parameters = Aggregators.fedavg_aggregate(parameters_list, weights)
         SerializationTool.deserialize_model(self._model, serialized_parameters)
 
         self.round += 1
@@ -122,12 +124,12 @@ class SemiAsyncServerHandler(ServerHandler):
         else:
             return False
 
-    def setup_dataset(self, dataset) -> None:
+    def setup_dataset(self, dataset: CompletePartitionedMNIST) -> None:
         self.dataset = dataset
 
     def evaluate(self):
         self._model.eval()
-        test_loader = self.dataset.get_dataloader(type="test", batch_size=128)
+        test_loader = self.dataset.get_dataloader(batch_size=128, type="test")
         loss_, acc_ = evaluate(self._model, nn.CrossEntropyLoss(), test_loader)
         self._LOGGER.info(
             f"Round [{self.round}/{self.global_round}] test performance on server: \t Loss: {loss_:.5f} \t Acc: {100*acc_:.3f}%"
@@ -246,23 +248,15 @@ class SemiAsyncServerManager(ServerManager):
             if rank in self.busy_clients:
                 continue
 
-            self._LOGGER.info(f"Preparing data for rank {rank}, client IDs: {values}")
+            # self._LOGGER.info(f"Preparing data for rank {rank}, client IDs: {values}")
             # Ensure values is not empty
-            if not values:
-                self._LOGGER.warning(f"No clients mapped to rank {rank}, skipping")
-                continue
-
-            id_list = torch.Tensor(values).to(downlink_package[0].dtype)
-            self._LOGGER.info(f"ID list shape: {id_list.shape}, dtype: {id_list.dtype}")
+            # if not values:
+            #     self._LOGGER.warning(f"No clients mapped to rank {rank}, skipping")
+            #     continue
 
             # Prepare send content and validate
-            send_content = [id_list] + downlink_package
-            # self._LOGGER.info(f"Sending to rank {rank}, content length: {len(send_content)}")
-            # for i, item in enumerate(send_content):
-            #     if isinstance(item, torch.Tensor):
-            #         self._LOGGER.info(f"Item {i}: tensor shape {item.shape}")
-            #     else:
-            #         self._LOGGER.info(f"Item {i}: {type(item)}")
+            send_content = downlink_package
+            self._LOGGER.info(f"Sending to rank {rank}, content length: {len(send_content)}")
 
             # 将参与训练的客户端标记为忙碌
             self.busy_clients.add(rank)
@@ -285,8 +279,7 @@ class SemiAsyncServerManager(ServerManager):
 
         for rank, values in rank_dict.items():
             downlink_package = self._handler.downlink_package
-            id_list = torch.Tensor(values).to(downlink_package[0].dtype)
-            self._network.send(content=[id_list] + downlink_package,
+            self._network.send(content=downlink_package,
                                message_code=MessageCode.Exit,
                                dst=rank)
 
@@ -316,21 +309,32 @@ if __name__ == "__main__":
 
     parser.add_argument('--ip', type=str, default='127.0.0.1')
     parser.add_argument('--port', type=str, default='3009')
-    parser.add_argument('--world_size', type=int, default=11)
-    parser.add_argument('--global_round', type=int, default=100)
-    parser.add_argument('--num_clients', type=int, default=10)
-    parser.add_argument('--model', type=str, default="mnist")
-    parser.add_argument('--eval_gap', type=int, default=5)
     parser.add_argument('--ethernet', type=str, default=None)
+
+    parser.add_argument('--world_size', type=int, default=11)
+    parser.add_argument('--num_clients', type=int, default=10)
+
+    parser.add_argument('--global_round', type=int, default=100)
+    parser.add_argument('--eval_gap', type=int, default=5)
+
+    parser.add_argument('--model', type=str, default="mnist")
+    parser.add_argument('--partition', type=str, default="iid", choices=["iid", "noniid-labeldir"])
+    parser.add_argument('--dir_alpha', type=float, default=0.5)
+    parser.add_argument('--seed', type=int, default=0)
+
     parser.add_argument('--sample', type=float, default=1)
 
     args = parser.parse_args()
 
     if args.model == "mnist":
         model = CNN_MNIST()
-        dataset_name = "mnist"
-        dataset = PathologicalMNIST(root='../datasets/mnist/', path="../datasets/mnist/", num_clients=args.num_clients)
-        dataset.preprocess()
+
+        if args.partition == "iid":
+            dataset_name = "mnist_iid"
+            dataset = CompletePartitionedMNIST(root='../datasets/mnist/', path="../datasets/mnist/", num_clients=args.num_clients, partition="iid")
+        else:
+            dataset_name = "mnist_noniid_" + "dir_alpha_" + str(args.dir_alpha)
+            dataset = CompletePartitionedMNIST(root='../datasets/mnist/', path="../datasets/mnist/", num_clients=args.num_clients, partition="noniid-labeldir", dir_alpha=args.dir_alpha, seed=args.seed)
     else:
         raise NotImplementedError
 
