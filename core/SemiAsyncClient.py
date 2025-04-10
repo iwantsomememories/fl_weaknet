@@ -51,7 +51,7 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
         self.data_id = client_id
         self._LOGGER.info("Data size of {}: {}".format(client_id, self.data_size))
     
-    def local_process(self, payload, id):
+    def local_process(self, payload):
         model_parameters = payload[0]
         self.model_version = payload[1]
 
@@ -97,7 +97,6 @@ class SemiAsyncClientManager(ClientManager):
         super().__init__(network, trainer)
         self.delay_gen = delay_gen
         self._LOGGER = Logger() if logger is None else logger
-
     
     def main_loop(self):
         while True:
@@ -114,7 +113,7 @@ class SemiAsyncClientManager(ClientManager):
                 #     torch.int32).tolist(), payload[1:]
 
                 # assert len(id_list) == 1
-                self._trainer.local_process(payload=payload, id=self._trainer.data_id)
+                self._trainer.local_process(payload=payload)
                 self._LOGGER.info("Finished local process, model version: {}".format(self._trainer.model_version))
 
                 self.synchronize()
@@ -180,6 +179,7 @@ if __name__ == "__main__":
     trainer = SemiAsyncClientTrainer(model, cuda=torch.cuda.is_available())
 
     print("rank: ", args.rank)
+    
     trainer.setup_dataset(dataset, args.rank - 1)
     trainer.setup_optim(args.epochs, args.batch_size, args.lr)
 

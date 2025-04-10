@@ -1,12 +1,14 @@
-#!/bin/bash
+#!/bin/zsh
 
-declare -i num_clients=2
-declare -i global_round=10
-declare -i world_size=$((num_clients+1))
-declare -i eval_gap=2
-declare -i epochs=2
-declare -i dir_alpha=0.5
-declare -i seed=0
+set -e
+
+num_clients=2
+global_round=3
+world_size=$((num_clients+1))
+eval_gap=1
+epochs=1
+seed=0
+float dir_alpha=0.5
 
 model="mnist"
 dataset="mnist"

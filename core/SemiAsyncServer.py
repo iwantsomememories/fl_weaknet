@@ -11,10 +11,9 @@ sys.path.append("../../")
 from typing import List
 from copy import deepcopy
 from datetime import datetime
-from threading import Thread, Event
-import queue
+import numpy as np
 
-from utils.TimeWindowSetting import TimeWindow
+from utils.TimeWindowScheduler import UCBScheduler, NaiveScheduler, BaseScheduler
 from utils.NetworkWrapper import AsyncNetworkWrapper
 from utils.Datasets import CompletePartitionedMNIST
 
@@ -144,7 +143,7 @@ class SemiAsyncServerManager(ServerManager):
             handler: ServerHandler,
             mode: str = "LOCAL",
             logger: Logger = None,
-            tw_setting: TimeWindow = None,
+            time_scheduler: BaseScheduler = None,
             dataset_name: str = 'mnist'
         ):
         super(SemiAsyncServerManager, self).__init__(network, handler, mode)
@@ -154,15 +153,64 @@ class SemiAsyncServerManager(ServerManager):
         # 时间窗口
         self.time_window = None
         self.client_time_delay = []
-        self.tw_setting = tw_setting
+        self.time_scheduler = time_scheduler
 
         # 该列表用于记录当前正在进行训练的客户端的rank
         self.busy_clients = set()
 
         # 该字典用于记录每个客户端的最后激活时间
         self.last_activate_time = {}
+    
+    def pre_train(self, round: int = 5):
+        self._LOGGER.info("Server pre-train procedure is running")
+        hist_client_delay = {}
+        average_client_delay = []
+
+        for i in range(self._handler.num_clients):
+            hist_client_delay[i] = []        
+        
+        for ep in range(round):
+            self.activate_clients()
+
+            count = 0
+            while count < self._handler.num_clients:
+                sender_rank, message_code, payload = self._network.recv()
+                if message_code == MessageCode.ParameterUpdate:
+                    # 接收到客户端更新，表示训练结束
+                    if sender_rank in self.busy_clients:
+                        self.busy_clients.remove(sender_rank)
+                    assert self.last_activate_time.get(sender_rank) is not None
+                    hist_client_delay[sender_rank - 1].append(time.time() - self.last_activate_time[sender_rank])
+                    count += 1
+                else:
+                    raise Exception(
+                        "Unexpected message code {}".format(message_code))
+        
+        self._LOGGER.info("Server pre-train procedure is finished")
+
+        for delays in hist_client_delay.values():
+            average_client_delay.append(sum(delays)/len(delays))
+        
+        q25 = np.percentile(average_client_delay, 25)
+        median = np.median(average_client_delay)
+        q75 = np.percentile(average_client_delay, 75)
+        max_value = np.max(average_client_delay)
+        candidate_windows = [q25, median, q75, max_value]
+        self.candidate_windows = sorted(candidate_windows)
+        self._LOGGER.info(f"Candidate time windows: {candidate_windows}")   
 
     def main_loop(self):
+        # 预训练阶段
+        self.pre_train(round=3)
+        if isinstance(self.time_scheduler, UCBScheduler):
+            self.time_scheduler.set_candidate_windows(self.candidate_windows)
+            self.time_window = self.time_scheduler.select_window()
+        elif isinstance(self.time_scheduler, NaiveScheduler):
+            self.time_window = self.candidate_windows[0]
+        else:
+            raise NotImplementedError("Invalid time scheduler")
+
+        self.busy_clients.clear()
         self.global_start_time = time.time()
         async_network_wrapper = AsyncNetworkWrapper(self._network)
 
@@ -171,9 +219,10 @@ class SemiAsyncServerManager(ServerManager):
             # activator.start()
             self.activate_clients()
 
+            self._LOGGER.info(f"Round: {self._handler.round}, time_window: {self.time_window}")
             start_time = time.time()
             # 在时间窗口内等待
-            while self.time_window == None or time.time() - start_time < self.time_window:
+            while time.time() - start_time < self.time_window:
                 sender_rank, message_code, payload = async_network_wrapper.recv_with_timeout(POLL_TIMEOUT)
                 if sender_rank is None:
                     continue
@@ -191,6 +240,7 @@ class SemiAsyncServerManager(ServerManager):
                     else:
                         assert self.last_activate_time.get(sender_rank) is not None
                         self.client_time_delay.append(time.time() - self.last_activate_time[sender_rank])
+                        self._LOGGER.info(f"Received updates from client {sender_rank}.")
                         if self._handler.load(payload):
                             break
                 else:
@@ -199,17 +249,27 @@ class SemiAsyncServerManager(ServerManager):
             
             self._LOGGER.info(f"The {self._handler.round} round: received {len(self.client_time_delay)} updates.")
             
+
+            if isinstance(self.time_scheduler, UCBScheduler):
+                if len(self.client_time_delay) > 0:
+                    client_params = [ele[0] for ele in deepcopy(self._handler.client_buffer_cache)]
+                    reward = self.time_scheduler.get_reward(global_params=self._handler.model_parameters, client_params_list=client_params, time_window=self.time_window)
+                else:
+                    reward = 0
+                self.time_scheduler.update(self.time_window, reward)
+                self.time_window = self.time_scheduler.select_window()
+            elif isinstance(self.time_scheduler, NaiveScheduler):
+                self.time_window = self.time_scheduler.select_window(self.client_time_delay, self.time_window)
+            else:
+                raise NotImplementedError("Invalid time scheduler")
+
             if len(self.client_time_delay) > 0:
                 self._handler.global_update()
-                # 设置时间窗口
-                if self.tw_setting != None:
-                    self.time_window = self.tw_setting(self.client_time_delay)
-                    self.client_time_delay = []
-                self._LOGGER.info(f"The {self._handler.round - 1} round training done.")
-                self._LOGGER.info(f"The time_window of the {self._handler.round} round is {self.time_window}")
             else:
                 # 本轮没有收到客户端更新
-                self._LOGGER.info(f"No updates received, keep waiting for clients.")
+                self._handler.round += 1
+            
+            self.client_time_delay = []
         
         self._LOGGER.info("Global Training done.")
         self._LOGGER.info("Total time cost: {}s".format(time.time() - self.global_start_time))
@@ -225,6 +285,8 @@ class SemiAsyncServerManager(ServerManager):
             if message_code == MessageCode.ParameterUpdate:
                 if sender_rank in self.busy_clients:
                     self.busy_clients.remove(sender_rank)
+        
+        self._LOGGER.info("All clients have finished training.")
 
     def shutdown(self):
         self.shutdown_clients()
@@ -247,12 +309,6 @@ class SemiAsyncServerManager(ServerManager):
             # 跳过仍在训练中的客户端
             if rank in self.busy_clients:
                 continue
-
-            # self._LOGGER.info(f"Preparing data for rank {rank}, client IDs: {values}")
-            # Ensure values is not empty
-            # if not values:
-            #     self._LOGGER.warning(f"No clients mapped to rank {rank}, skipping")
-            #     continue
 
             # Prepare send content and validate
             send_content = downlink_package
@@ -350,8 +406,10 @@ if __name__ == "__main__":
                         world_size=args.world_size,
                         rank=0,
                         ethernet=args.ethernet)
+    
+    time_scheduler = UCBScheduler(args.num_clients)
 
-    manager_ = SemiAsyncServerManager(network=network, handler=handler, logger=LOGGER, tw_setting=TimeWindow.average, dataset_name=dataset_name)
+    manager_ = SemiAsyncServerManager(network=network, handler=handler, logger=LOGGER, time_scheduler=time_scheduler, dataset_name=dataset_name)
 
     manager_.run()
     manager_.save_results()

@@ -1,7 +1,6 @@
 import numpy as np
 import random
 
-
 class DelayGenerator:
     def __init__(self, delay_lower, delay_upper, error_lower, error_upper, max_retries=5):
         """
@@ -37,7 +36,7 @@ class MultiModeDelayGenerator:
         self.modes = {
             "low_latency": {"delay_lower": 1.0, "delay_upper": 2.5, "error_lower": 0.05, "error_upper": 0.2},
             "high_latency": {"delay_lower": 3.0, "delay_upper": 10.0, "error_lower": 0.1, "error_upper": 0.3},
-            "unstable": {"delay_lower": 0.5, "delay_upper": 2.0, "error_lower": 0.3, "error_upper": 0.8},
+            "unstable": {"delay_lower": 1.0, "delay_upper": 3.0, "error_lower": 0.3, "error_upper": 0.8},
         }
     
     def get_generator(self, mode=None):
