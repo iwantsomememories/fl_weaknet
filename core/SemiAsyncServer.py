@@ -94,7 +94,7 @@ class SemiAsyncServerHandler(ServerHandler):
         assert self.num_clients_per_round == len(sampled)
         return sorted(sampled)
 
-    def global_update(self):
+    def global_update(self, start_time=None):
         # 更新全局模型，同时更新相关训练数据;
         # 此外，根据eval_gap定期评估模型
         parameters_list = [ele[0] for ele in self.client_buffer_cache]
@@ -106,7 +106,7 @@ class SemiAsyncServerHandler(ServerHandler):
         self.client_buffer_cache = []
 
         if self.round > 0 and self.round % self.eval_gap == 0:
-            loss, acc = self.evaluate()
+            loss, acc = self.evaluate(start_time=start_time)
             self.test_loss.append((self.round, loss))
             self.test_acc.append((self.round, acc))
 
@@ -126,12 +126,13 @@ class SemiAsyncServerHandler(ServerHandler):
     def setup_dataset(self, dataset: CompletePartitionedMNIST) -> None:
         self.dataset = dataset
 
-    def evaluate(self):
+    def evaluate(self, start_time):
         self._model.eval()
         test_loader = self.dataset.get_dataloader(batch_size=128, type="test")
         loss_, acc_ = evaluate(self._model, nn.CrossEntropyLoss(), test_loader)
+        cur_time = time.time() - start_time
         self._LOGGER.info(
-            f"Round [{self.round}/{self.global_round}] test performance on server: \t Loss: {loss_:.5f} \t Acc: {100*acc_:.3f}%"
+            f"Round [{self.round}/{self.global_round}] test performance on server: \t Loss: {loss_:.5f} \t Acc: {100*acc_:.3f}% Curtime: {cur_time:.2f}s"
         )
 
         return loss_, acc_
@@ -206,7 +207,7 @@ class SemiAsyncServerManager(ServerManager):
             self.time_scheduler.set_candidate_windows(self.candidate_windows)
             self.time_window = self.time_scheduler.select_window()
         elif isinstance(self.time_scheduler, NaiveScheduler):
-            self.time_window = self.candidate_windows[0]
+            self.time_window = self.candidate_windows[1] # 选择中位数作为初始时间窗口
         else:
             raise NotImplementedError("Invalid time scheduler")
 
@@ -264,7 +265,7 @@ class SemiAsyncServerManager(ServerManager):
                 raise NotImplementedError("Invalid time scheduler")
 
             if len(self.client_time_delay) > 0:
-                self._handler.global_update()
+                self._handler.global_update(self.global_start_time)
             else:
                 # 本轮没有收到客户端更新
                 self._handler.round += 1
@@ -407,7 +408,8 @@ if __name__ == "__main__":
                         rank=0,
                         ethernet=args.ethernet)
     
-    time_scheduler = UCBScheduler(args.num_clients)
+    time_scheduler = UCBScheduler(args.num_clients, 1.0, 1.0)
+    # time_scheduler = NaiveScheduler("fixed")
 
     manager_ = SemiAsyncServerManager(network=network, handler=handler, logger=LOGGER, time_scheduler=time_scheduler, dataset_name=dataset_name)
 

@@ -147,7 +147,7 @@ if __name__ == "__main__":
     parser.add_argument('--rank', type=int)
 
     parser.add_argument("--epochs", type=int, default=5)
-    parser.add_argument("--lr", type=float, default=0.01)
+    parser.add_argument("--lr", type=float, default=0.001)
     parser.add_argument("--batch_size", type=int, default=32)
 
     parser.add_argument('--model', type=str, default="mnist")

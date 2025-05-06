@@ -178,14 +178,14 @@ if __name__ == "__main__":
         )
 
         # 查看数据分布
-        # for i in range(0, args.num_clients):
-        #     train = dataset.get_dataset(i, "train")
-        #     print("data size of client {}: {}".format(i, len(train)))
-        #     print("data distribution: {}".format(count_classes_loader(train)))
+        for i in range(0, args.num_clients):
+            train = dataset.get_dataset(i, "train")
+            print("data size of client {}: {}".format(i, len(train)))
+            print("data distribution: {}".format(count_classes_loader(train)))
 
-        # test = dataset.get_dataset(type="test")
-        # print("data size of test: {}".format(len(test)))
-        # print("data distribution: {}".format(count_classes_loader(test)))
+        test = dataset.get_dataset(type="test")
+        print("data size of test: {}".format(len(test)))
+        print("data distribution: {}".format(count_classes_loader(test)))
 
         # 检查数据格式是否正确
         # model = CNN_MNIST()

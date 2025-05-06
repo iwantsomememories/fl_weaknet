@@ -61,7 +61,7 @@ class UCBScheduler(BaseScheduler):
 
 class NaiveScheduler(BaseScheduler):
     def __init__(self, mode):
-        if mode not in ["average", "max"]:
+        if mode not in ["average", "max", "fixed"]:
             raise ValueError("Invalid mode. Choose 'average' or 'max'.")
         self.mode = mode
     
@@ -72,6 +72,8 @@ class NaiveScheduler(BaseScheduler):
             return sum(time_costs)/len(time_costs)
         elif self.mode == "max":
             return max(time_costs)
+        elif self.mode == "fixed":
+            return time_window
 
 if __name__ == "__main__":
     import random, time
