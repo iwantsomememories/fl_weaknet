@@ -46,6 +46,8 @@ class SemiAsyncServerHandler(ServerHandler):
         sampler: FedSampler = None,
         logger: Logger = None,
         eval_gap: int = 5,
+        target_accuracy: float = None,
+        last_test_acc: float = 0.0,
     ):
         super(SemiAsyncServerHandler, self).__init__(model, cuda, device)
 
@@ -66,11 +68,14 @@ class SemiAsyncServerHandler(ServerHandler):
         # 终止条件
         self.global_round = global_round
         self.round = 0
+        self.target_accuracy = target_accuracy
+        self.last_test_acc = last_test_acc
 
         # 模型评估
         self.eval_gap = eval_gap
         self.test_acc = []
         self.test_loss = []
+
 
     @property
     def downlink_package(self):
@@ -82,6 +87,10 @@ class SemiAsyncServerHandler(ServerHandler):
 
     @property
     def if_stop(self):
+        if self.target_accuracy is not None:
+            # 终止条件：达到目标精度
+            return self.last_test_acc >= self.target_accuracy or self.round >= self.global_round
+        # 终止条件：达到最大轮数
         return self.round >= self.global_round
 
     def sample_clients(self, num_to_sample=None):
@@ -130,6 +139,10 @@ class SemiAsyncServerHandler(ServerHandler):
         self._model.eval()
         test_loader = self.dataset.get_dataloader(batch_size=128, type="test")
         loss_, acc_ = evaluate(self._model, nn.CrossEntropyLoss(), test_loader)
+
+        if self.target_accuracy is not None:
+            self.last_test_acc = acc_ * 100.0
+
         cur_time = time.time() - start_time
         self._LOGGER.info(
             f"Round [{self.round}/{self.global_round}] test performance on server: \t Loss: {loss_:.5f} \t Acc: {100*acc_:.3f}% Curtime: {cur_time:.2f}s"
@@ -145,7 +158,9 @@ class SemiAsyncServerManager(ServerManager):
             mode: str = "LOCAL",
             logger: Logger = None,
             time_scheduler: BaseScheduler = None,
-            dataset_name: str = 'mnist'
+            dataset_name: str = 'mnist',
+            # 是否开启同步模式
+            sync_wait: bool = False,
         ):
         super(SemiAsyncServerManager, self).__init__(network, handler, mode)
         self._LOGGER = Logger() if logger is None else logger
@@ -161,6 +176,8 @@ class SemiAsyncServerManager(ServerManager):
 
         # 该字典用于记录每个客户端的最后激活时间
         self.last_activate_time = {}
+
+        self.sync_wait = sync_wait
     
     def pre_train(self, round: int = 5):
         self._LOGGER.info("Server pre-train procedure is running")
@@ -223,7 +240,7 @@ class SemiAsyncServerManager(ServerManager):
             self._LOGGER.info(f"Round: {self._handler.round}, time_window: {self.time_window}")
             start_time = time.time()
             # 在时间窗口内等待
-            while time.time() - start_time < self.time_window:
+            while time.time() - start_time < self.time_window or self.sync_wait:
                 sender_rank, message_code, payload = async_network_wrapper.recv_with_timeout(POLL_TIMEOUT)
                 if sender_rank is None:
                     continue

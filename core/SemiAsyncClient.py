@@ -146,10 +146,12 @@ if __name__ == "__main__":
     parser.add_argument('--num_clients', type=int, default=10)
     parser.add_argument('--rank', type=int)
 
+    # 本地训练参数
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--lr", type=float, default=0.001)
     parser.add_argument("--batch_size", type=int, default=32)
 
+    # 模型与数据集划分
     parser.add_argument('--model', type=str, default="mnist")
     parser.add_argument('--partition', type=str, default="iid", choices=["iid", "noniid-labeldir"])
     parser.add_argument('--dir_alpha', type=float, default=0.5)
