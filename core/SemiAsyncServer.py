@@ -267,19 +267,19 @@ class SemiAsyncServerManager(ServerManager):
             
             self._LOGGER.info(f"The {self._handler.round} round: received {len(self.client_time_delay)} updates.")
             
-
-            if isinstance(self.time_scheduler, UCBScheduler):
-                if len(self.client_time_delay) > 0:
-                    client_params = [ele[0] for ele in deepcopy(self._handler.client_buffer_cache)]
-                    reward = self.time_scheduler.get_reward(global_params=self._handler.model_parameters, client_params_list=client_params, time_window=self.time_window)
+            if not self.sync_wait:
+                if isinstance(self.time_scheduler, UCBScheduler):
+                    if len(self.client_time_delay) > 0:
+                        client_params = [ele[0] for ele in deepcopy(self._handler.client_buffer_cache)]
+                        reward = self.time_scheduler.get_reward(global_params=self._handler.model_parameters, client_params_list=client_params, time_window=self.time_window)
+                    else:
+                        reward = 0
+                    self.time_scheduler.update(self.time_window, reward)
+                    self.time_window = self.time_scheduler.select_window()
+                elif isinstance(self.time_scheduler, NaiveScheduler):
+                    self.time_window = self.time_scheduler.select_window(self.client_time_delay, self.time_window)
                 else:
-                    reward = 0
-                self.time_scheduler.update(self.time_window, reward)
-                self.time_window = self.time_scheduler.select_window()
-            elif isinstance(self.time_scheduler, NaiveScheduler):
-                self.time_window = self.time_scheduler.select_window(self.client_time_delay, self.time_window)
-            else:
-                raise NotImplementedError("Invalid time scheduler")
+                    raise NotImplementedError("Invalid time scheduler")
 
             if len(self.client_time_delay) > 0:
                 self._handler.global_update(self.global_start_time)
@@ -292,17 +292,18 @@ class SemiAsyncServerManager(ServerManager):
         self._LOGGER.info("Global Training done.")
         self._LOGGER.info("Total time cost: {}s".format(time.time() - self.global_start_time))
 
-        unprocessed_messages  = async_network_wrapper.shutdown()
-        for (sender_rank, message_code, payload) in unprocessed_messages:
-            if message_code == MessageCode.ParameterUpdate:
-                self.busy_clients.remove(sender_rank)
-
-        # 等待所有客户端完成训练
-        while len(self.busy_clients) > 0:
-            sender_rank, message_code, payload = self._network.recv()
-            if message_code == MessageCode.ParameterUpdate:
-                if sender_rank in self.busy_clients:
+        if not self.sync_wait:
+            unprocessed_messages  = async_network_wrapper.shutdown()
+            for (sender_rank, message_code, payload) in unprocessed_messages:
+                if message_code == MessageCode.ParameterUpdate:
                     self.busy_clients.remove(sender_rank)
+
+            # 等待所有客户端完成训练
+            while len(self.busy_clients) > 0:
+                sender_rank, message_code, payload = self._network.recv()
+                if message_code == MessageCode.ParameterUpdate:
+                    if sender_rank in self.busy_clients:
+                        self.busy_clients.remove(sender_rank)
         
         self._LOGGER.info("All clients have finished training.")
 
@@ -420,6 +421,10 @@ if __name__ == "__main__":
     handler = SemiAsyncServerHandler(model=model, global_round=args.global_round, num_clients=args.num_clients, sample_ratio=args.sample, cuda=torch.cuda.is_available(), logger=LOGGER, eval_gap=args.eval_gap)
     handler.setup_dataset(dataset)
 
+    # 设置目标精度
+    handler.target_accuracy = 0.95
+
+
     network = DistNetwork(address=(args.ip, args.port),
                         world_size=args.world_size,
                         rank=0,
@@ -429,6 +434,9 @@ if __name__ == "__main__":
     # time_scheduler = NaiveScheduler("fixed")
 
     manager_ = SemiAsyncServerManager(network=network, handler=handler, logger=LOGGER, time_scheduler=time_scheduler, dataset_name=dataset_name)
+
+    # 采用全同步模式
+    manager_.sync_wait = True
 
     manager_.run()
     manager_.save_results()
