@@ -9,6 +9,7 @@ from datetime import datetime
 
 import torch
 from torch import nn
+import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
 
@@ -37,13 +38,30 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
                 model:torch.nn.Module,
                 cuda:bool=False,
                 device:str=None,
-                logger:Logger=None):
+                logger:Logger=None,
+                use_usce: bool=False,
+                usce_beta0: float=0.1,
+                usce_kappa: float=1.0,
+                usce_rce_label_min: float=1e-4,
+                usce_eps: float=1e-12):
         super().__init__(model, cuda, device, logger)
         self.model_version = None
+        self.system_uncertainty = 0.0
+        self.avg_train_loss = 0.0
+        self.use_usce = use_usce
+        self.usce_beta0 = usce_beta0
+        self.usce_kappa = usce_kappa
+        self.usce_rce_label_min = usce_rce_label_min
+        self.usce_eps = usce_eps
     
     @property
     def uplink_package(self):
-        return [self.model_parameters, self.model_version, torch.tensor(self.data_size).to(self.model_parameters.dtype)]
+        return [
+            self.model_parameters,
+            self.model_version,
+            torch.tensor(self.data_size).to(self.model_parameters.dtype),
+            torch.tensor(self.avg_train_loss).to(self.model_parameters.dtype)
+        ]
 
     def setup_dataset(self, dataset: CompletePartitionedMNIST, client_id):
         self.dataset = dataset
@@ -54,6 +72,7 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
     def local_process(self, payload):
         model_parameters = payload[0]
         self.model_version = payload[1]
+        self.system_uncertainty = payload[2] if len(payload) > 2 else 0.0
 
         # # print("model_parameters: ", model_parameters)
         # print("Client {} received model version {}".format(id, self.model_version))
@@ -73,6 +92,8 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
         SerializationTool.deserialize_model(
             self._model, model_parameters)  # load parameters
         self._LOGGER.info("Local train procedure is running")
+        total_loss = 0.0
+        total_samples = 0
         for ep in range(self.epochs):
             self._model.train()
             for data, target in train_loader:
@@ -80,12 +101,50 @@ class SemiAsyncClientTrainer(SGDClientTrainer):
                     data, target = data.cuda(self.device), target.cuda(self.device)
 
                 outputs = self._model(data)
-                loss = self.criterion(outputs, target)
+                if self.use_usce:
+                    loss = self.uncertainty_aware_sce_loss(
+                        outputs, target, self.system_uncertainty)
+                else:
+                    loss = self.criterion(outputs, target)
+
+                batch_size = target.size(0)
+                total_loss += loss.item() * batch_size
+                total_samples += batch_size
 
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
+        if total_samples > 0:
+            self.avg_train_loss = total_loss / total_samples
         self._LOGGER.info("Local train procedure is finished")
+
+    def uncertainty_aware_sce_loss(self, outputs, target, system_uncertainty):
+        """Uncertainty-aware symmetric cross entropy loss."""
+        num_classes = outputs.size(1)
+        probs = F.softmax(outputs, dim=1)
+
+        ce = F.cross_entropy(outputs, target, reduction="none")
+
+        one_hot = F.one_hot(target, num_classes=num_classes).to(
+            device=outputs.device, dtype=outputs.dtype)
+        clipped_labels = torch.clamp(one_hot, min=self.usce_rce_label_min, max=1.0)
+        rce = -torch.sum(probs * torch.log(clipped_labels), dim=1)
+
+        entropy = -torch.sum(
+            probs.detach() * torch.log(probs.detach().clamp_min(self.usce_eps)),
+            dim=1
+        )
+        normalized_entropy = entropy / torch.log(
+            torch.tensor(num_classes, device=outputs.device, dtype=outputs.dtype))
+
+        system_uncertainty = torch.as_tensor(
+            system_uncertainty, device=outputs.device, dtype=outputs.dtype)
+        beta = self.usce_beta0 * torch.exp(
+            -self.usce_kappa * system_uncertainty) * normalized_entropy
+        beta = torch.clamp(beta, min=0.0, max=1.0)
+        alpha = 1.0 - beta
+
+        return torch.mean(alpha * ce + beta * rce)
 
 class SemiAsyncClientManager(ClientManager):
 
@@ -114,7 +173,9 @@ class SemiAsyncClientManager(ClientManager):
 
                 # assert len(id_list) == 1
                 self._trainer.local_process(payload=payload)
-                self._LOGGER.info("Finished local process, model version: {}".format(self._trainer.model_version))
+                self._LOGGER.info(
+                    "Finished local process, model version: {}, system uncertainty: {}".format(
+                        self._trainer.model_version, self._trainer.system_uncertainty))
 
                 self.synchronize()
 
@@ -150,6 +211,10 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--lr", type=float, default=0.001)
     parser.add_argument("--batch_size", type=int, default=32)
+    parser.add_argument("--use_usce", action="store_true")
+    parser.add_argument("--usce_beta0", type=float, default=0.1)
+    parser.add_argument("--usce_kappa", type=float, default=1.0)
+    parser.add_argument("--usce_rce_label_min", type=float, default=1e-4)
 
     # 模型与数据集划分
     parser.add_argument('--model', type=str, default="mnist")
@@ -178,7 +243,13 @@ if __name__ == "__main__":
     #     os.makedirs(logs_path)
     # LOGGER = Logger(log_name="semiasync_client " + str(args.rank), log_file="../logs/semiasync_client_" + datetime.now().strftime("%Y%m%d%H%M%S") + ".log")
 
-    trainer = SemiAsyncClientTrainer(model, cuda=torch.cuda.is_available())
+    trainer = SemiAsyncClientTrainer(
+        model,
+        cuda=torch.cuda.is_available(),
+        use_usce=args.use_usce,
+        usce_beta0=args.usce_beta0,
+        usce_kappa=args.usce_kappa,
+        usce_rce_label_min=args.usce_rce_label_min)
 
     print("rank: ", args.rank)
     

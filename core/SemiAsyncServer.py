@@ -48,6 +48,8 @@ class SemiAsyncServerHandler(ServerHandler):
         eval_gap: int = 5,
         target_accuracy: float = None,
         last_test_acc: float = 0.0,
+        use_noise_weight: bool = False,
+        nw_eps: float = 1e-12,
     ):
         super(SemiAsyncServerHandler, self).__init__(model, cuda, device)
 
@@ -70,6 +72,9 @@ class SemiAsyncServerHandler(ServerHandler):
         self.round = 0
         self.target_accuracy = target_accuracy
         self.last_test_acc = last_test_acc
+        self.use_noise_weight = use_noise_weight
+        self.nw_eps = nw_eps
+        self.noise_history = {}
 
         # 模型评估
         self.eval_gap = eval_gap
@@ -107,7 +112,7 @@ class SemiAsyncServerHandler(ServerHandler):
         # 更新全局模型，同时更新相关训练数据;
         # 此外，根据eval_gap定期评估模型
         parameters_list = [ele[0] for ele in self.client_buffer_cache]
-        weights = [ele[2] for ele in self.client_buffer_cache]
+        weights = self.get_aggregation_weights()
         serialized_parameters = Aggregators.fedavg_aggregate(parameters_list, weights)
         SerializationTool.deserialize_model(self._model, serialized_parameters)
 
@@ -120,10 +125,13 @@ class SemiAsyncServerHandler(ServerHandler):
             self.test_acc.append((self.round, acc))
 
 
-    def load(self, payload: List[torch.Tensor]) -> bool:
+    def load(self, payload: List[torch.Tensor], client_id: int = None) -> bool:
         # 取出客户端训练结果
         assert len(payload) > 0
-        self.client_buffer_cache.append(deepcopy(payload))
+        cached_payload = deepcopy(payload)
+        if client_id is not None:
+            cached_payload.append(client_id)
+        self.client_buffer_cache.append(cached_payload)
 
         assert len(self.client_buffer_cache) <= self.num_clients_per_round
 
@@ -131,6 +139,52 @@ class SemiAsyncServerHandler(ServerHandler):
             return True  # 返回True若客户端缓存已满.
         else:
             return False
+
+    def get_aggregation_weights(self):
+        base_weights = [ele[2] for ele in self.client_buffer_cache]
+        if not self.use_noise_weight:
+            return base_weights
+
+        adjusted_weights = []
+        for payload, base_weight in zip(self.client_buffer_cache, base_weights):
+            if len(payload) < 5:
+                adjusted_weights.append(base_weight)
+                continue
+
+            local_loss = float(payload[3].item())
+            client_id = int(payload[4])
+            model_version = int(payload[1].item())
+
+            noise_weight = self.get_noise_weight(
+                client_id=client_id,
+                local_loss=local_loss,
+                model_version=model_version)
+            adjusted_weights.append(base_weight * noise_weight)
+
+        total_weight = sum(float(weight.item()) for weight in adjusted_weights)
+        if total_weight <= self.nw_eps:
+            return base_weights
+        return adjusted_weights
+
+    def get_noise_weight(self, client_id: int, local_loss: float, model_version: int):
+        last_state = self.noise_history.get(client_id)
+        if last_state is None:
+            last_loss = local_loss
+            last_version = model_version
+        else:
+            last_loss = last_state["loss"]
+            last_version = last_state["version"]
+
+        version_gap = max(self.round - last_version, 1)
+        delta = (last_loss - local_loss) / version_gap
+        scaled_delta = np.clip(delta / max(local_loss, self.nw_eps), -50.0, 50.0)
+        noise_weight = 1.0 / (1.0 + np.exp(-scaled_delta))
+
+        self.noise_history[client_id] = {
+            "loss": local_loss,
+            "version": model_version,
+        }
+        return torch.tensor(noise_weight).to(self.model_parameters.dtype)
 
     def setup_dataset(self, dataset: CompletePartitionedMNIST) -> None:
         self.dataset = dataset
@@ -259,7 +313,7 @@ class SemiAsyncServerManager(ServerManager):
                         assert self.last_activate_time.get(sender_rank) is not None
                         self.client_time_delay.append(time.time() - self.last_activate_time[sender_rank])
                         self._LOGGER.info(f"Received updates from client {sender_rank}.")
-                        if self._handler.load(payload):
+                        if self._handler.load(payload, client_id=sender_rank - 1):
                             break
                 else:
                     raise Exception(
@@ -320,6 +374,8 @@ class SemiAsyncServerManager(ServerManager):
         # print(rank_dict)
 
         downlink_package = self._handler.downlink_package
+        system_uncertainty = torch.tensor(
+            self.get_system_uncertainty()).to(self._handler.model_parameters.dtype)
         # self._LOGGER.info(f"Downlink package length: {len(downlink_package)}")
         # for i, tensor in enumerate(downlink_package):
         #     self._LOGGER.info(f"Tensor {i}: shape {tensor.shape}, dtype {tensor.dtype}")
@@ -330,7 +386,7 @@ class SemiAsyncServerManager(ServerManager):
                 continue
 
             # Prepare send content and validate
-            send_content = downlink_package
+            send_content = downlink_package + [system_uncertainty]
             self._LOGGER.info(f"Sending to rank {rank}, content length: {len(send_content)}")
 
             # 将参与训练的客户端标记为忙碌
@@ -345,6 +401,17 @@ class SemiAsyncServerManager(ServerManager):
             # 记录最后激活时间
             self.last_activate_time[rank] = time.time()
             self._LOGGER.info(f"Data sent to rank {rank}")
+
+    def get_system_uncertainty(self):
+        if not isinstance(self.time_scheduler, UCBScheduler):
+            return 0.0
+        if self.time_window is None or not hasattr(self.time_scheduler, "windows"):
+            return 0.0
+
+        idx = self.time_scheduler.windows.index(self.time_window)
+        selected_count = max(float(self.time_scheduler.counts[idx]) + 1.0, 1.0)
+        current_round = max(float(self._handler.round + 1), 2.0)
+        return float(np.sqrt(np.log(current_round) / selected_count))
 
     def shutdown_clients(self):
         client_list = range(self._handler.num_clients)
@@ -398,6 +465,8 @@ if __name__ == "__main__":
     parser.add_argument('--seed', type=int, default=0)
 
     parser.add_argument('--sample', type=float, default=1)
+    parser.add_argument("--use_noise_weight", action="store_true")
+    parser.add_argument("--nw_eps", type=float, default=1e-12)
 
     args = parser.parse_args()
 
@@ -418,7 +487,16 @@ if __name__ == "__main__":
         os.makedirs(logs_path)
     LOGGER = Logger(log_name="semiasync_server", log_file=logs_path + "semiasync_server_" + datetime.now().strftime("%Y%m%d%H%M%S") + ".log")
 
-    handler = SemiAsyncServerHandler(model=model, global_round=args.global_round, num_clients=args.num_clients, sample_ratio=args.sample, cuda=torch.cuda.is_available(), logger=LOGGER, eval_gap=args.eval_gap)
+    handler = SemiAsyncServerHandler(
+        model=model,
+        global_round=args.global_round,
+        num_clients=args.num_clients,
+        sample_ratio=args.sample,
+        cuda=torch.cuda.is_available(),
+        logger=LOGGER,
+        eval_gap=args.eval_gap,
+        use_noise_weight=args.use_noise_weight,
+        nw_eps=args.nw_eps)
     handler.setup_dataset(dataset)
 
     # 设置目标精度
