@@ -1,4 +1,5 @@
 import argparse
+import csv
 import sys
 import torch
 from torch import nn
@@ -33,6 +34,61 @@ from fedlab.models import CNN_CIFAR10, CNN_FEMNIST, CNN_MNIST
 
 POLL_TIMEOUT = 1.0
 # Polling timeout for receiving messages
+
+
+class WeaknetTrace:
+    """CSV-backed weak-network trace indexed by (round, client_id)."""
+
+    def __init__(self, path: str):
+        self.path = path
+        self.events = {}
+        self.delays = []
+        with open(path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            required = {
+                "round",
+                "client_id",
+                "total_delay",
+                "lost",
+                "disconnected",
+            }
+            missing = required - set(reader.fieldnames or [])
+            if missing:
+                raise ValueError(
+                    "Trace file {} missing columns: {}".format(
+                        path, sorted(missing)))
+
+            for row in reader:
+                trace_round = int(row["round"])
+                client_id = int(row["client_id"])
+                event = {
+                    "total_delay": float(row["total_delay"]),
+                    "lost": int(row["lost"]),
+                    "disconnected": int(row["disconnected"]),
+                    "event_type": row.get("event_type", "unknown"),
+                }
+                self.events[(trace_round, client_id)] = event
+                if event["lost"] == 0 and event["disconnected"] == 0:
+                    self.delays.append(event["total_delay"])
+
+    def get(self, trace_round: int, client_id: int):
+        return self.events.get((trace_round, client_id))
+
+    def is_update_expected(self, trace_round: int, client_id: int) -> bool:
+        event = self.get(trace_round, client_id)
+        if event is None:
+            return True
+        return event["lost"] == 0 and event["disconnected"] == 0
+
+    def candidate_windows(self):
+        if not self.delays:
+            return [POLL_TIMEOUT]
+        q25 = np.percentile(self.delays, 25)
+        median = np.median(self.delays)
+        q75 = np.percentile(self.delays, 75)
+        max_value = np.max(self.delays)
+        return sorted([q25, median, q75, max_value])
+
 
 class SemiAsyncServerHandler(ServerHandler):
     def __init__(
@@ -215,10 +271,14 @@ class SemiAsyncServerManager(ServerManager):
             dataset_name: str = 'mnist',
             # 是否开启同步模式
             sync_wait: bool = False,
+            trace: WeaknetTrace = None,
+            trace_round_offset: int = 1,
         ):
         super(SemiAsyncServerManager, self).__init__(network, handler, mode)
         self._LOGGER = Logger() if logger is None else logger
         self.dataset_name = dataset_name
+        self.trace = trace
+        self.trace_round_offset = trace_round_offset
 
         # 时间窗口
         self.time_window = None
@@ -232,6 +292,7 @@ class SemiAsyncServerManager(ServerManager):
         self.last_activate_time = {}
 
         self.sync_wait = sync_wait
+        self.expected_update_ranks = set()
     
     def pre_train(self, round: int = 5):
         self._LOGGER.info("Server pre-train procedure is running")
@@ -272,8 +333,15 @@ class SemiAsyncServerManager(ServerManager):
         self._LOGGER.info(f"Candidate time windows: {candidate_windows}")   
 
     def main_loop(self):
-        # 预训练阶段
-        self.pre_train(round=3)
+        # 预训练阶段。使用 trace 时跳过预训练，避免 trace 中的丢包/断连让阻塞式
+        # recv 永久等待，并直接用 trace 的成功传输时延估计候选时间窗口。
+        if self.trace is None:
+            self.pre_train(round=3)
+        else:
+            self.candidate_windows = self.trace.candidate_windows()
+            self._LOGGER.info(
+                f"Candidate time windows from trace: {self.candidate_windows}")
+
         if isinstance(self.time_scheduler, UCBScheduler):
             self.time_scheduler.set_candidate_windows(self.candidate_windows)
             self.time_window = self.time_scheduler.select_window()
@@ -293,8 +361,13 @@ class SemiAsyncServerManager(ServerManager):
 
             self._LOGGER.info(f"Round: {self._handler.round}, time_window: {self.time_window}")
             start_time = time.time()
+            accepted_update_count = 0
+            expected_update_count = len(self.expected_update_ranks)
             # 在时间窗口内等待
             while time.time() - start_time < self.time_window or self.sync_wait:
+                if self.sync_wait and accepted_update_count >= expected_update_count:
+                    break
+
                 sender_rank, message_code, payload = async_network_wrapper.recv_with_timeout(POLL_TIMEOUT)
                 if sender_rank is None:
                     continue
@@ -313,7 +386,10 @@ class SemiAsyncServerManager(ServerManager):
                         assert self.last_activate_time.get(sender_rank) is not None
                         self.client_time_delay.append(time.time() - self.last_activate_time[sender_rank])
                         self._LOGGER.info(f"Received updates from client {sender_rank}.")
+                        accepted_update_count += 1
                         if self._handler.load(payload, client_id=sender_rank - 1):
+                            break
+                        if self.sync_wait and accepted_update_count >= expected_update_count:
                             break
                 else:
                     raise Exception(
@@ -350,7 +426,7 @@ class SemiAsyncServerManager(ServerManager):
             unprocessed_messages  = async_network_wrapper.shutdown()
             for (sender_rank, message_code, payload) in unprocessed_messages:
                 if message_code == MessageCode.ParameterUpdate:
-                    self.busy_clients.remove(sender_rank)
+                    self.busy_clients.discard(sender_rank)
 
             # 等待所有客户端完成训练
             while len(self.busy_clients) > 0:
@@ -380,17 +456,35 @@ class SemiAsyncServerManager(ServerManager):
         # for i, tensor in enumerate(downlink_package):
         #     self._LOGGER.info(f"Tensor {i}: shape {tensor.shape}, dtype {tensor.dtype}")
 
+        self.expected_update_ranks = set()
+        trace_round = self._handler.round + self.trace_round_offset
+
         for rank, values in rank_dict.items():
             # 跳过仍在训练中的客户端
             if rank in self.busy_clients:
                 continue
 
+            client_id = rank - 1
+            trace_event = self.trace.get(trace_round, client_id) if self.trace is not None else None
+            update_expected = (
+                self.trace is None or
+                self.trace.is_update_expected(trace_round, client_id))
+            if update_expected:
+                self.expected_update_ranks.add(rank)
+            elif trace_event is not None:
+                self._LOGGER.info(
+                    "Trace marks client {} update as unavailable at trace "
+                    "round {} (event_type: {}).".format(
+                        client_id, trace_round, trace_event["event_type"]))
+
             # Prepare send content and validate
             send_content = downlink_package + [system_uncertainty]
             self._LOGGER.info(f"Sending to rank {rank}, content length: {len(send_content)}")
 
-            # 将参与训练的客户端标记为忙碌
-            self.busy_clients.add(rank)
+            # 将会产生有效更新的客户端标记为忙碌；trace 丢包/断连客户端不会
+            # 向服务器返回更新，不能依赖 recv 来释放 busy 状态。
+            if update_expected:
+                self.busy_clients.add(rank)
 
             # 发送数据
             self._network.send(
@@ -467,6 +561,12 @@ if __name__ == "__main__":
     parser.add_argument('--sample', type=float, default=1)
     parser.add_argument("--use_noise_weight", action="store_true")
     parser.add_argument("--nw_eps", type=float, default=1e-12)
+    parser.add_argument("--trace_path", type=str, default=None)
+    parser.add_argument(
+        "--trace_round_offset",
+        type=int,
+        default=1,
+        help="Trace round = server handler round + trace_round_offset.")
 
     args = parser.parse_args()
 
@@ -511,7 +611,16 @@ if __name__ == "__main__":
     time_scheduler = UCBScheduler(args.num_clients, 1.0, 1.0)
     # time_scheduler = NaiveScheduler("fixed")
 
-    manager_ = SemiAsyncServerManager(network=network, handler=handler, logger=LOGGER, time_scheduler=time_scheduler, dataset_name=dataset_name)
+    trace = WeaknetTrace(args.trace_path) if args.trace_path else None
+
+    manager_ = SemiAsyncServerManager(
+        network=network,
+        handler=handler,
+        logger=LOGGER,
+        time_scheduler=time_scheduler,
+        dataset_name=dataset_name,
+        trace=trace,
+        trace_round_offset=args.trace_round_offset)
 
     # 采用全同步模式
     manager_.sync_wait = True

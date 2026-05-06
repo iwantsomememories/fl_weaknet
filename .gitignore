@@ -3,3 +3,4 @@ logs/
 !logs/read_csv.py
 !logs/read_log.py
 .codex
+.csv

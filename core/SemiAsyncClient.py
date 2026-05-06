@@ -1,4 +1,5 @@
 import argparse
+import csv
 from statistics import mode
 import sys
 import random
@@ -30,6 +31,40 @@ from fedlab.contrib.algorithm.basic_client import SGDClientTrainer
 from fedlab.core.model_maintainer import ModelMaintainer
 from fedlab.models import CNN_CIFAR10, CNN_FEMNIST, CNN_MNIST
 
+
+class WeaknetTrace:
+    """CSV-backed weak-network trace indexed by (round, client_id)."""
+
+    def __init__(self, path: str):
+        self.path = path
+        self.events = {}
+        with open(path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            required = {
+                "round",
+                "client_id",
+                "total_delay",
+                "lost",
+                "disconnected",
+            }
+            missing = required - set(reader.fieldnames or [])
+            if missing:
+                raise ValueError(
+                    "Trace file {} missing columns: {}".format(
+                        path, sorted(missing)))
+
+            for row in reader:
+                trace_round = int(row["round"])
+                client_id = int(row["client_id"])
+                self.events[(trace_round, client_id)] = {
+                    "total_delay": float(row["total_delay"]),
+                    "lost": int(row["lost"]),
+                    "disconnected": int(row["disconnected"]),
+                    "event_type": row.get("event_type", "unknown"),
+                }
+
+    def get(self, trace_round: int, client_id: int):
+        return self.events.get((trace_round, client_id))
 
 
 class SemiAsyncClientTrainer(SGDClientTrainer):
@@ -152,9 +187,13 @@ class SemiAsyncClientManager(ClientManager):
                 network: DistNetwork,
                 trainer: ModelMaintainer,
                 logger: Logger=None,
-                delay_gen: DelayGenerator=None):
+                delay_gen: DelayGenerator=None,
+                trace: WeaknetTrace=None,
+                trace_round_offset: int=1):
         super().__init__(network, trainer)
         self.delay_gen = delay_gen
+        self.trace = trace
+        self.trace_round_offset = trace_round_offset
         self._LOGGER = Logger() if logger is None else logger
     
     def main_loop(self):
@@ -187,8 +226,31 @@ class SemiAsyncClientManager(ClientManager):
     def synchronize(self):
         self._LOGGER.info("Uploading information to server.")
 
-        # 模拟通信时延
-        actual_delay = self.delay_gen.generate_delay()
+        trace_event = None
+        client_id = self._network.rank - 1
+        if self.trace is not None:
+            trace_round = int(self._trainer.model_version) + self.trace_round_offset
+            trace_event = self.trace.get(trace_round, client_id)
+
+        if trace_event is not None:
+            if trace_event["lost"] == 1 or trace_event["disconnected"] == 1:
+                self._LOGGER.info(
+                    "Trace drops client {} update at trace round {} "
+                    "(event_type: {}).".format(
+                        client_id, trace_round, trace_event["event_type"]))
+                return
+            actual_delay = trace_event["total_delay"]
+            self._LOGGER.info(
+                "Trace delay for client {} at trace round {}: {:.4f}s "
+                "(event_type: {}).".format(
+                    client_id, trace_round, actual_delay,
+                    trace_event["event_type"]))
+        elif self.delay_gen is not None:
+            # 模拟通信时延
+            actual_delay = self.delay_gen.generate_delay()
+        else:
+            actual_delay = 0.0
+
         time.sleep(actual_delay)
 
         self._network.send(content=self._trainer.uplink_package,
@@ -221,6 +283,12 @@ if __name__ == "__main__":
     parser.add_argument('--partition', type=str, default="iid", choices=["iid", "noniid-labeldir"])
     parser.add_argument('--dir_alpha', type=float, default=0.5)
     parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument("--trace_path", type=str, default=None)
+    parser.add_argument(
+        "--trace_round_offset",
+        type=int,
+        default=1,
+        help="Trace round = received model_version + trace_round_offset.")
 
     args = parser.parse_args()
 
@@ -258,5 +326,12 @@ if __name__ == "__main__":
 
     factory = MultiModeDelayGenerator()
     
-    manager = SemiAsyncClientManager(network=network, trainer=trainer, delay_gen=factory.get_generator())
+    trace = WeaknetTrace(args.trace_path) if args.trace_path else None
+
+    manager = SemiAsyncClientManager(
+        network=network,
+        trainer=trainer,
+        delay_gen=factory.get_generator(),
+        trace=trace,
+        trace_round_offset=args.trace_round_offset)
     manager.run()
